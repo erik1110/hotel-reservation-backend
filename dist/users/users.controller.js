@@ -65,8 +65,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "signup", null);
 exports.UsersController = UsersController = __decorate([
-    (0, common_1.Controller)('users'),
-    (0, swagger_1.ApiTags)('Users'),
+    (0, common_1.Controller)('/api/v1/users'),
+    (0, swagger_1.ApiTags)('Users - 使用者'),
     __metadata("design:paramtypes", [users_service_1.UsersService])
 ], UsersController);
 //# sourceMappingURL=users.controller.js.map

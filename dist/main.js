@@ -11,6 +11,9 @@ async function bootstrap() {
         .setTitle('Hotel Reservation Backend')
         .setDescription('This is my swagger document.')
         .setVersion('1.0')
+        .addServer('http://localhost:3000', 'HTTP')
+        .addServer('https://localhost', 'HTTPS')
+        .addBearerAuth()
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api', app, document);

@@ -6,11 +6,10 @@ import { ApiOkResponse, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swag
 import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
 import { RegisterSuccess } from 'src/swagger/users';
 
-@Controller('users')
-@ApiTags('Users')
+@Controller('/api/v1/users')
+@ApiTags('Users - 使用者')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
 
   @ApiOkResponse({type: RegisterSuccess})
   @ApiErrorDecorator(HttpStatus.BAD_REQUEST, 'MongoServerError', 'Duplicated User')
