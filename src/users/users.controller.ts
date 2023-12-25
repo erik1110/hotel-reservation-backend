@@ -2,11 +2,19 @@ import { Controller, Post, Body, HttpStatus, UsePipes, ValidationPipe } from '@n
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/CreateUser';
 import { AppError } from 'src/utils/appError';
+import { ApiOkResponse, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
+import { RegisterSuccess } from 'src/swagger/users';
 
 @Controller('users')
+@ApiTags('Users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+
+  @ApiOkResponse({type: RegisterSuccess})
+  @ApiErrorDecorator(HttpStatus.BAD_REQUEST, 'MongoServerError', 'Duplicated User')
+  @ApiErrorDecorator(HttpStatus.INTERNAL_SERVER_ERROR, '出現重大錯誤', '系統錯誤，請洽系統管理員')
   @Post('signup')
   @UsePipes(new ValidationPipe({ transform: true }))
   async signup(@Body() createUserDto: CreateUserDto) {

@@ -17,6 +17,9 @@ const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const CreateUser_1 = require("./dto/CreateUser");
 const appError_1 = require("../utils/appError");
+const swagger_1 = require("@nestjs/swagger");
+const error_decorator_1 = require("../common/decorator/error/error.decorator");
+const users_1 = require("../swagger/users");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -51,6 +54,9 @@ let UsersController = class UsersController {
 };
 exports.UsersController = UsersController;
 __decorate([
+    (0, swagger_1.ApiOkResponse)({ type: users_1.RegisterSuccess }),
+    (0, error_decorator_1.ApiErrorDecorator)(common_1.HttpStatus.BAD_REQUEST, 'MongoServerError', 'Duplicated User'),
+    (0, error_decorator_1.ApiErrorDecorator)(common_1.HttpStatus.INTERNAL_SERVER_ERROR, '出現重大錯誤', '系統錯誤，請洽系統管理員'),
     (0, common_1.Post)('signup'),
     (0, common_1.UsePipes)(new common_1.ValidationPipe({ transform: true })),
     __param(0, (0, common_1.Body)()),
@@ -60,6 +66,7 @@ __decorate([
 ], UsersController.prototype, "signup", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
+    (0, swagger_1.ApiTags)('Users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])
 ], UsersController);
 //# sourceMappingURL=users.controller.js.map
