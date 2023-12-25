@@ -1,9 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { zipCodeList } from 'src/utils/zipcodes';
 import { raw } from '@nestjs/mongoose';
-
-
 export interface IUser extends Document {
   name: string;
   email: string;

@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsNumber } from "class-validator";
+import { IsDate, IsEmail, IsNotEmpty, Length, Matches, ValidateNested } from "class-validator";
+import { AddressDto } from './Address';
+import { Transform, Type } from 'class-transformer';
 
 export class CreateUserDto {
     @ApiProperty({
@@ -7,6 +9,7 @@ export class CreateUserDto {
         description: 'Username',
     })
     @IsNotEmpty()
+    @Length(2, 255, { message: 'Username length should be in 4~30 characters.' })
     name: string;
 
     @ApiProperty({
@@ -21,6 +24,7 @@ export class CreateUserDto {
         description: 'Password',
     })
     @IsNotEmpty()
+    @Length(4, 30, { message: 'Password length should be in 4~30 characters' })
     password: string;
 
     @ApiProperty({
@@ -28,29 +32,23 @@ export class CreateUserDto {
         description: 'Phone',
     })
     @IsNotEmpty()
+    @Matches(/^09\d{8}$/, { message: 'Invalid Phone' })
     phone: string;
 
     @ApiProperty({
-        example: '1991/01/01',
+        example: '1991-01-01',
         description: 'Birthday',
     })
     @IsNotEmpty()
+    @Transform(({ value }) => new Date(value))
+    @IsDate({ message: 'Invalid Birthday' })
     birthday: Date;
 
     @ApiProperty({
-        example: {
-            zipcode: 100,
-            detail: '100臺北市中正區',
-            county: '中正區',
-            city: '臺北市',
-        },
+        type: AddressDto,
         description: 'Address',
-    })
-    @IsNotEmpty()
-    address: {
-      zipcode: number;
-      detail: string;
-      county: string;
-      city: string;
-    };
+      })
+    @ValidateNested({ each: true })
+    @Type(() => AddressDto)
+    address: AddressDto;
   }

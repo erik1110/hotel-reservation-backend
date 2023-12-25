@@ -12,6 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUserDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+const Address_1 = require("./Address");
+const class_transformer_1 = require("class-transformer");
 class CreateUserDto {
 }
 exports.CreateUserDto = CreateUserDto;
@@ -21,6 +23,7 @@ __decorate([
         description: 'Username',
     }),
     (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.Length)(2, 255, { message: 'Username length should be in 4~30 characters.' }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "name", void 0);
 __decorate([
@@ -37,6 +40,7 @@ __decorate([
         description: 'Password',
     }),
     (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.Length)(4, 30, { message: 'Password length should be in 4~30 characters' }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "password", void 0);
 __decorate([
@@ -45,27 +49,26 @@ __decorate([
         description: 'Phone',
     }),
     (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.Matches)(/^09\d{8}$/, { message: 'Invalid Phone' }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "phone", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: '1991/01/01',
+        example: '1991-01-01',
         description: 'Birthday',
     }),
     (0, class_validator_1.IsNotEmpty)(),
+    (0, class_transformer_1.Transform)(({ value }) => new Date(value)),
+    (0, class_validator_1.IsDate)({ message: 'Invalid Birthday' }),
     __metadata("design:type", Date)
 ], CreateUserDto.prototype, "birthday", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: {
-            zipcode: 100,
-            detail: '100臺北市中正區',
-            county: '中正區',
-            city: '臺北市',
-        },
+        type: Address_1.AddressDto,
         description: 'Address',
     }),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", Object)
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => Address_1.AddressDto),
+    __metadata("design:type", Address_1.AddressDto)
 ], CreateUserDto.prototype, "address", void 0);
 //# sourceMappingURL=CreateUser.js.map

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.zipCodeList = void 0;
+exports.zipCityList = exports.zipCountyList = exports.zipDetailList = exports.zipCodeList = void 0;
 const ZipCodeMap = [
     { detail: '100臺北市中正區', zipcode: 100, county: '臺北市', city: '中正區' },
     { detail: '103臺北市大同區', zipcode: 103, county: '臺北市', city: '大同區' },
@@ -374,6 +374,12 @@ const ZipCodeMap = [
     { detail: '211連江縣莒光鄉', zipcode: 211, county: '連江縣', city: '莒光鄉' },
     { detail: '212連江縣東引鄉', zipcode: 212, county: '連江縣', city: '東引鄉' }
 ];
+ZipCodeMap.forEach(item => {
+    [item.county, item.city] = [item.city, item.county];
+});
 exports.zipCodeList = ZipCodeMap.map(value => value.zipcode);
+exports.zipDetailList = ZipCodeMap.map(value => value.detail);
+exports.zipCountyList = [...new Set(ZipCodeMap.map(value => value.county))];
+exports.zipCityList = [...new Set(ZipCodeMap.map(value => value.city))];
 exports.default = ZipCodeMap;
 //# sourceMappingURL=zipcodes.js.map

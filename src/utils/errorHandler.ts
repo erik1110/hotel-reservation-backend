@@ -1,15 +1,8 @@
 import { Catch, ArgumentsHost, HttpStatus, ExceptionFilter, HttpException } from '@nestjs/common';
 
-export const resErrorStatus = ({ statusCode }: { statusCode: number }) => {
-  if (statusCode === 500) {
-    return 'error';
-  }
-  return 'false';
-};
-
 export const resErrorDev = (err: any, res: any) => {
   res.status(err.statusCode).json({
-    status: 'false',
+    status: false,
     name: err.name,
     message: err.message,
     error: err,
@@ -19,12 +12,11 @@ export const resErrorDev = (err: any, res: any) => {
 
 export const resErrorProd = (err: any, res: any) => {
   const resErrorData = {
-    status: '',
+    status: false,
     name: '',
     message: '',
   };
-  resErrorData.status = resErrorStatus(err);
-
+  console.log("err:", err)
   if (err.isOperational) {
     resErrorData.message = err.message;
     resErrorData.name = err.name;
@@ -43,15 +35,15 @@ export class ErrorHandlerFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const err = exception;
-    err.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+    err.statusCode = err.status || HttpStatus.INTERNAL_SERVER_ERROR;
 
     // dev
     if (process.env.NODE_ENV === 'dev') {
       return resErrorDev(err, response);
     }
     // production
-    if (err.name === 'ValidationError') {
-      err.message = '資料欄位未填寫正確，請重新輸入！';
+    if (err.name === 'BadRequestException') {
+      err.message = err.response.message;
       err.isOperational = true;
       return resErrorProd(err, response);
     }

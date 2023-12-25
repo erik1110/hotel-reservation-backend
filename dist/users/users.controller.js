@@ -41,7 +41,7 @@ let UsersController = class UsersController {
         }
         catch (error) {
             if (error.code === 11000) {
-                throw new appError_1.AppError(common_1.HttpStatus.BAD_REQUEST, 'UserError', 'Duplicated User');
+                throw new appError_1.AppError(common_1.HttpStatus.BAD_REQUEST, 'MongoServerError', 'Duplicated User');
             }
             else {
                 throw error;
@@ -52,6 +52,7 @@ let UsersController = class UsersController {
 exports.UsersController = UsersController;
 __decorate([
     (0, common_1.Post)('signup'),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ transform: true })),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateUser_1.CreateUserDto]),

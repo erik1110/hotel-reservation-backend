@@ -6,18 +6,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ErrorHandlerFilter = exports.resErrorProd = exports.resErrorDev = exports.resErrorStatus = void 0;
+exports.ErrorHandlerFilter = exports.resErrorProd = exports.resErrorDev = void 0;
 const common_1 = require("@nestjs/common");
-const resErrorStatus = ({ statusCode }) => {
-    if (statusCode === 500) {
-        return 'error';
-    }
-    return 'false';
-};
-exports.resErrorStatus = resErrorStatus;
 const resErrorDev = (err, res) => {
     res.status(err.statusCode).json({
-        status: 'false',
+        status: false,
         name: err.name,
         message: err.message,
         error: err,
@@ -27,11 +20,11 @@ const resErrorDev = (err, res) => {
 exports.resErrorDev = resErrorDev;
 const resErrorProd = (err, res) => {
     const resErrorData = {
-        status: '',
+        status: false,
         name: '',
         message: '',
     };
-    resErrorData.status = (0, exports.resErrorStatus)(err);
+    console.log("err:", err);
     if (err.isOperational) {
         resErrorData.message = err.message;
         resErrorData.name = err.name;
@@ -50,12 +43,12 @@ let ErrorHandlerFilter = class ErrorHandlerFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
         const err = exception;
-        err.statusCode = common_1.HttpStatus.INTERNAL_SERVER_ERROR;
+        err.statusCode = err.status || common_1.HttpStatus.INTERNAL_SERVER_ERROR;
         if (process.env.NODE_ENV === 'dev') {
             return (0, exports.resErrorDev)(err, response);
         }
-        if (err.name === 'ValidationError') {
-            err.message = '資料欄位未填寫正確，請重新輸入！';
+        if (err.name === 'BadRequestException') {
+            err.message = err.response.message;
             err.isOperational = true;
             return (0, exports.resErrorProd)(err, response);
         }

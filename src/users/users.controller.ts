@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/CreateUser';
 import { AppError } from 'src/utils/appError';
@@ -8,6 +8,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('signup')
+  @UsePipes(new ValidationPipe({ transform: true }))
   async signup(@Body() createUserDto: CreateUserDto) {
     try {
       const { name, email, password, phone, birthday, address } = createUserDto;
@@ -35,7 +36,7 @@ export class UsersController {
       };
     } catch (error) {
       if (error.code === 11000) {
-        throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', 'Duplicated User');
+        throw new AppError(HttpStatus.BAD_REQUEST, 'MongoServerError', 'Duplicated User');
       } else {
         throw error;
       }

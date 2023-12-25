@@ -372,6 +372,13 @@ const ZipCodeMap = [
     { detail: '212連江縣東引鄉', zipcode: 212, county: '連江縣', city: '東引鄉' }
 ];
 
+ZipCodeMap.forEach(item => {
+    [item.county, item.city] = [item.city, item.county];
+});
+
 export const zipCodeList = ZipCodeMap.map(value => value.zipcode);
+export const zipDetailList = ZipCodeMap.map(value => value.detail);
+export const zipCountyList = [...new Set(ZipCodeMap.map(value => value.county))];
+export const zipCityList = [...new Set(ZipCodeMap.map(value => value.city))];
 
 export default ZipCodeMap;
