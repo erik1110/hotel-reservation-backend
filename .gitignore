@@ -8,6 +8,9 @@
 logs
 *.log
 
+# dist
+dist/
+
 # ignore 3rd party lib
 node_modules
 

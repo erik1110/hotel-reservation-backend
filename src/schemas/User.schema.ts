@@ -19,7 +19,6 @@ export interface IUser extends Document {
 @Schema({ timestamps: true, versionKey: false })
 export class User extends Document implements IUser {
   @Prop({
-    unique: true,
     type: String,
     required: [true, 'name 未填寫'],
   })

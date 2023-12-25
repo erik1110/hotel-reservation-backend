@@ -25,31 +25,25 @@ let UsersController = class UsersController {
         this.usersService = usersService;
     }
     async signup(createUserDto) {
-        try {
-            const { name, email, password, phone, birthday, address } = createUserDto;
-            const user = await this.usersService.create({
-                name,
-                email,
-                phone,
-                birthday,
-                address,
-                password: await this.usersService.hashPassword(password),
-            });
-            const { password: _, ...result } = user.toObject();
-            return {
-                status: true,
-                token: this.usersService.generateToken({ userId: result._id }),
-                result,
-            };
+        const { name, email, password, phone, birthday, address } = createUserDto;
+        const checkEmail = await this.usersService.findOneByEmail(email);
+        if (checkEmail) {
+            throw new appError_1.AppError(common_1.HttpStatus.BAD_REQUEST, 'Data', 'Duplicated Email');
         }
-        catch (error) {
-            if (error.code === 11000) {
-                throw new appError_1.AppError(common_1.HttpStatus.BAD_REQUEST, 'MongoServerError', 'Duplicated User');
-            }
-            else {
-                throw error;
-            }
-        }
+        const user = await this.usersService.create({
+            name,
+            email,
+            phone,
+            birthday,
+            address,
+            password: await this.usersService.hashPassword(password),
+        });
+        const { password: _, ...result } = user.toObject();
+        return {
+            status: true,
+            token: this.usersService.generateToken({ userId: result._id }),
+            result,
+        };
     }
 };
 exports.UsersController = UsersController;

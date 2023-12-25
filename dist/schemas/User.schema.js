@@ -18,7 +18,6 @@ let User = class User extends mongoose_2.Document {
 exports.User = User;
 __decorate([
     (0, mongoose_1.Prop)({
-        unique: true,
         type: String,
         required: [true, 'name 未填寫'],
     }),

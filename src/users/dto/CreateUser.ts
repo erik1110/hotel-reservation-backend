@@ -13,7 +13,7 @@ export class CreateUserDto {
     name: string;
 
     @ApiProperty({
-        example: 'test@exampl.com',
+        example: 'test@example.com',
         description: 'Email',
     })
     @IsEmail()
