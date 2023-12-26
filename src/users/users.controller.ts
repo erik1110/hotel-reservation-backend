@@ -6,7 +6,7 @@ import { ApiOkResponse, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swag
 import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
 import { RegisterSuccess } from 'src/swagger/users';
 
-@Controller('/api/v1/users')
+@Controller('users')
 @ApiTags('Users - 使用者')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

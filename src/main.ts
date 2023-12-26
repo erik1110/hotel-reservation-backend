@@ -5,6 +5,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api/v1');
   app.useGlobalFilters(new ErrorHandlerFilter());
   const config = new DocumentBuilder()
     .setTitle('Hotel Reservation Backend')
@@ -16,7 +17,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
   await app.listen(3000);
 }
 bootstrap();
