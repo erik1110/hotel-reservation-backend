@@ -2,7 +2,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { Request } from 'express';
 import { AuthService } from '../../auth/auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
-import { Injectable, BadRequestException, NotFoundException, ConflictException, ForbiddenException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, ConflictException, ForbiddenException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { v4 } from 'uuid';
@@ -16,6 +16,8 @@ import { ForgotPassword } from './interfaces/forgot-password.interface';
 import { User } from './interfaces/user.interface';
 import { EmailDto } from './dto/email.dto';
 import * as nodemailer from 'nodemailer';
+import { getHttpResponse } from 'src/utils/successHandler';
+import { AppError } from 'src/utils/appError';
 
 @Injectable()
 export class UserService {
@@ -44,16 +46,6 @@ export class UserService {
     // ┬  ┬┌─┐┬─┐┬┌─┐┬ ┬  ┌─┐┌┬┐┌─┐┬┬
     // └┐┌┘├┤ ├┬┘│├┤ └┬┘  ├┤ │││├─┤││
     //  └┘ └─┘┴└─┴└   ┴   └─┘┴ ┴┴ ┴┴┴─┘
-    async verifyEmail(req: Request, verifyUuidDto: VerifyUuidDto) {
-        const user = await this.findByVerification(verifyUuidDto.verification);
-        await this.setUserAsVerified(user);
-        return {
-            name: user.name,
-            email: user.email,
-            accessToken: await this.authService.createAccessToken(user._id),
-            refreshToken: await this.authService.createRefreshToken(req, user._id),
-        };
-    }
 
     async generateEmail(req: Request, emailDto: EmailDto) {
         const message = { message: '信件已寄出'}
@@ -102,31 +94,19 @@ export class UserService {
     // ┴─┘└─┘└─┘┴┘└┘
     async login(req: Request, loginUserDto: LoginUserDto) {
         const user = await this.findUserByEmail(loginUserDto.email);
-        console.log("user:", user)
         this.isUserBlocked(user);
         await this.checkPassword(loginUserDto.password, user);
         await this.passwordsAreMatch(user);
-        return {
-            name: user.name,
-            email: user.email,
-            accessToken: await this.authService.createAccessToken(user._id),
-            refreshToken: await this.authService.createRefreshToken(req, user._id),
-        };
+        return getHttpResponse.successResponse({
+            message: "登入成功",
+            data: {
+                name: user.name,
+                email: user.email,
+                accessToken: await this.authService.createAccessToken(user._id),
+            }
+        })
     }
 
-    // ┬─┐┌─┐┌─┐┬─┐┌─┐┌─┐┬ ┬  ┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐  ┌┬┐┌─┐┬┌─┌─┐┌┐┌
-    // ├┬┘├┤ ├┤ ├┬┘├┤ └─┐├─┤  ├─┤│  │  ├┤ └─┐└─┐   │ │ │├┴┐├┤ │││
-    // ┴└─└─┘└  ┴└─└─┘└─┘┴ ┴  ┴ ┴└─┘└─┘└─┘└─┘└─┘   ┴ └─┘┴ ┴└─┘┘└┘
-    async refreshAccessToken(refreshAccessTokenDto: RefreshAccessTokenDto) {
-        const userId = await this.authService.findRefreshToken(refreshAccessTokenDto.refreshToken);
-        const user = await this.userModel.findById(userId);
-        if (!user) {
-            throw new BadRequestException('Bad request');
-        }
-        return {
-            accessToken: await this.authService.createAccessToken(user._id),
-        };
-    }
 
     // ┌─┐┌─┐┬─┐┌─┐┌─┐┌┬┐  ┌─┐┌─┐┌─┐┌─┐┬ ┬┌─┐┬─┐┌┬┐
     // ├┤ │ │├┬┘│ ┬│ │ │   ├─┘├─┤└─┐└─┐││││ │├┬┘ ││
@@ -153,36 +133,11 @@ export class UserService {
             throw new BadRequestException('錯誤的驗證碼');
         }
 
-        return {
-            status: true,
-            message: '更新密碼成功'
-        };
+        return getHttpResponse.successResponse({
+            message: '修改密碼成功'
+        })
     }
 
-    // ┌─┐┌─┐┬─┐┌─┐┌─┐┌┬┐  ┌─┐┌─┐┌─┐┌─┐┬ ┬┌─┐┬─┐┌┬┐  ┬  ┬┌─┐┬─┐┬┌─┐┬ ┬
-    // ├┤ │ │├┬┘│ ┬│ │ │   ├─┘├─┤└─┐└─┐││││ │├┬┘ ││  └┐┌┘├┤ ├┬┘│├┤ └┬┘
-    // └  └─┘┴└─└─┘└─┘ ┴   ┴  ┴ ┴└─┘└─┘└┴┘└─┘┴└──┴┘   └┘ └─┘┴└─┴└   ┴
-    async forgotPasswordVerify(req: Request, verifyUuidDto: VerifyUuidDto) {
-        const forgotPassword = await this.findForgotPasswordByUuid(verifyUuidDto);
-        await this.setForgotPasswordFirstUsed(req, forgotPassword);
-        return {
-            email: forgotPassword.email,
-            message: 'now reset your password.',
-        };
-    }
-
-    // ┬─┐┌─┐┌─┐┌─┐┌┬┐  ┌─┐┌─┐┌─┐┌─┐┬ ┬┌─┐┬─┐┌┬┐
-    // ├┬┘├┤ └─┐├┤  │   ├─┘├─┤└─┐└─┐││││ │├┬┘ ││
-    // ┴└─└─┘└─┘└─┘ ┴   ┴  ┴ ┴└─┘└─┘└┴┘└─┘┴└──┴┘
-    async resetPassword(resetPasswordDto: ResetPasswordDto) {
-        const forgotPassword = await this.findForgotPasswordByEmail(resetPasswordDto);
-        await this.setForgotPasswordFinalUsed(forgotPassword);
-        await this.resetUserPassword(resetPasswordDto);
-        return {
-            email: resetPasswordDto.email,
-            message: 'password successfully changed.',
-        };
-    }
     // ┌─┐┬─┐┌┬┐┌─┐┌─┐┌┬┐┌─┐┌┬┐  ┌─┐┌─┐┬─┐┬  ┬┬┌─┐┌─┐
     // ├─┘├┬┘ │ ├┤ │   │ ├┤  ││  └─┐├┤ ├┬┘└┐┌┘││  ├┤
     // ┴  ┴└─ ┴ └─┘└─┘ ┴ └─┘─┴┘  └─┘└─┘┴└─ └┘ ┴└─┘└─┘
@@ -196,33 +151,28 @@ export class UserService {
     // ╩  ╩╚═╩ ╚╝ ╩ ╩ ╩ ╚═╝  ╩ ╩╚═╝ ╩ ╩ ╩╚═╝═╩╝╚═╝
     // ********************************************
 
-    private async isEmailUnique(email: string) {
-        const user = await this.userModel.findOne({email});
-        if (user) {
-            throw new BadRequestException('Email most be unique.');
-        }
-    }
-
     private buildRegistrationInfo(user): any {
         const userRegistrationInfo = {
             name: user.name,
             email: user.email,
         };
-        return userRegistrationInfo;
+        return getHttpResponse.successResponse({
+            message: "建立帳號成功",
+            data: userRegistrationInfo
+        })
     }
 
-    private async findByVerification(verification: string): Promise<User> {
-        const user = await this.userModel.findOne({verification, verified: false, verificationExpires: {$gt: new Date()}});
-        if (!user) {
-            throw new BadRequestException('Bad request.');
+    private async isEmailUnique(email: string) {
+        const user = await this.userModel.findOne({email});
+        if (user) {
+            throw new AppError(HttpStatus.BAD_REQUEST, 'User', '該信箱被註冊');
         }
-        return user;
     }
 
     private async findByEmail(email: string): Promise<User> {
         const user = await this.userModel.findOne({email}).select('+verificationToken');;
         if (!user) {
-            throw new NotFoundException('Email not found.');
+            throw new AppError(HttpStatus.BAD_REQUEST, 'User', '錯誤的信箱');
         }
         return user;
     }
@@ -236,15 +186,10 @@ export class UserService {
         return isEmailExists;
     }
 
-    private async setUserAsVerified(user) {
-        user.verified = true;
-        await user.save();
-    }
-
     private async findUserByEmail(email: string): Promise<User> {
         const user = await this.userModel.findOne({email}).select('+password');
         if (!user) {
-          throw new NotFoundException('Wrong email or password.');
+          throw new AppError(HttpStatus.BAD_REQUEST, 'User', '錯誤的信箱或密碼');
         }
         return user;
       }
@@ -253,7 +198,7 @@ export class UserService {
         const match = await bcrypt.compare(attemptPass, user.password);
         if (!match) {
             await this.passwordsDoNotMatch(user);
-            throw new NotFoundException('Wrong email or password.');
+            throw new AppError(HttpStatus.BAD_REQUEST, 'User', '錯誤的信箱或密碼');
         }
         return match;
       }
@@ -261,7 +206,7 @@ export class UserService {
     private isUserBlocked(user) {
         console.log(user.blockExpires > Date.now())
         if (user.blockExpires > Date.now()) {
-            throw new ConflictException('User has been blocked try later.');
+            throw new AppError(HttpStatus.BAD_REQUEST, 'User', '該帳號封鎖中，請稍後再試');
         }
     }
 
@@ -270,7 +215,7 @@ export class UserService {
         await user.save();
         if (user.loginAttempts >= this.LOGIN_ATTEMPTS_TO_BLOCK) {
             await this.blockUser(user);
-            throw new ConflictException('User blocked.');
+            throw new AppError(HttpStatus.BAD_REQUEST, 'User', '錯誤嘗試多次，封鎖該帳號');
         }
     }
 
@@ -285,72 +230,12 @@ export class UserService {
         await user.save();
     }
 
-    private async saveForgotPassword(req: Request, createForgotPasswordDto: CreateForgotPasswordDto) {
-        const forgotPassword = await this.forgotPasswordModel.create({
-            email: createForgotPasswordDto.email,
-            verification: v4(),
-            expires: addHours(new Date(), this.HOURS_TO_VERIFY),
-            ip: this.authService.getIp(req),
-            browser: this.authService.getBrowserInfo(req),
-            country: this.authService.getCountry(req),
-        });
-        await forgotPassword.save();
-    }
-
-    private async findForgotPasswordByUuid(verifyUuidDto: VerifyUuidDto): Promise<ForgotPassword> {
-        const forgotPassword = await this.forgotPasswordModel.findOne({
-            verification: verifyUuidDto.verification,
-            firstUsed: false,
-            finalUsed: false,
-            expires: {$gt: new Date()},
-        });
-        if (!forgotPassword) {
-            throw new BadRequestException('Bad request.');
-        }
-        return forgotPassword;
-    }
-
-    private async setForgotPasswordFirstUsed(req: Request, forgotPassword: ForgotPassword) {
-        forgotPassword.firstUsed = true;
-        forgotPassword.ipChanged = this.authService.getIp(req);
-        forgotPassword.browserChanged = this.authService.getBrowserInfo(req);
-        forgotPassword.countryChanged = this.authService.getCountry(req);
-        await forgotPassword.save();
-    }
-
-    private async findForgotPasswordByEmail(resetPasswordDto: ResetPasswordDto): Promise<ForgotPassword> {
-        const forgotPassword = await this.forgotPasswordModel.findOne({
-            email: resetPasswordDto.email,
-            firstUsed: true,
-            finalUsed: false,
-            expires: {$gt: new Date()},
-        });
-        if (!forgotPassword) {
-            throw new BadRequestException('Bad request.');
-        }
-        return forgotPassword;
-    }
-
-    private async setForgotPasswordFinalUsed(forgotPassword: ForgotPassword) {
-        forgotPassword.finalUsed = true;
-        await forgotPassword.save();
-    }
-
-    private async resetUserPassword(resetPasswordDto: ResetPasswordDto) {
-        const user = await this.userModel.findOne({
-            email: resetPasswordDto.email,
-            verified: true,
-        });
-        user.password = resetPasswordDto.password;
-        await user.save();
-    }
-
-
     private async getTransporter() {
         const { EMAILER_USER, EMAILER_PASSWORD } = process.env;
     
         if (!EMAILER_USER || !EMAILER_PASSWORD) {
             throw new Error('Email 服務未啟用');
+
         }
     
         const transporter = nodemailer.createTransport({

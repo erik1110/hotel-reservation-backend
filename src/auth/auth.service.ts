@@ -18,7 +18,6 @@ export class AuthService {
 
   constructor(
     @InjectModel('User') private readonly userModel: Model<User>,
-    @InjectModel('RefreshToken') private readonly refreshTokenModel: Model<RefreshToken>,
     private readonly jwtService: JwtService,
   ) {
     this.cryptr = new Cryptr(process.env.ENCRYPT_JWT_SECRET);
@@ -32,6 +31,7 @@ export class AuthService {
   }
 
   async verifyToken(token: string) {
+    console.log("verifyToken")
     try {
       return verify(token, process.env.JWT_SECRET) as JwtPayload;
     } catch (error) {
@@ -43,33 +43,14 @@ export class AuthService {
   }
 
   async createAccessToken(userId: string) {
-    // const accessToken = this.jwtService.sign({userId});
     const accessToken = sign({userId}, process.env.JWT_SECRET , { expiresIn: process.env.JWT_EXPIRATION });
     return this.encryptText(accessToken);
   }
 
-  async createRefreshToken(req: Request, userId) {
-    const refreshToken = new this.refreshTokenModel({
-      userId,
-      refreshToken: v4(),
-      ip: this.getIp(req),
-      browser: this.getBrowserInfo(req),
-      country: this.getCountry(req),
-    });
-    await refreshToken.save();
-    return refreshToken.refreshToken;
-  }
-
-  async findRefreshToken(token: string) {
-    const refreshToken = await this.refreshTokenModel.findOne({refreshToken: token});
-    if (!refreshToken) {
-      throw new UnauthorizedException('User has been logged out.');
-    }
-    return refreshToken.userId;
-  }
-
   async validateUser(jwtPayload: JwtPayload): Promise<any> {
-    const user = await this.userModel.findOne({_id: jwtPayload.userId, verified: true});
+    console.log("validateUser")
+    const user = await this.userModel.findOne({_id: jwtPayload.userId});
+    console.log("user:", user)
     if (!user) {
       throw new UnauthorizedException('User not found.');
     }
@@ -96,13 +77,12 @@ export class AuthService {
       try {
         token = cryptr.decrypt(token);
       } catch (err) {
+        console.log(err)
         throw new BadRequestException('Bad request.');
       }
   }
     return token;
-  
 }
-
   // ***********************
   // ╔╦╗╔═╗╔╦╗╦ ╦╔═╗╔╦╗╔═╗
   // ║║║║╣  ║ ╠═╣║ ║ ║║╚═╗
