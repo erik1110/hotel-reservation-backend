@@ -1,9 +1,9 @@
 import { JwtPayload } from './interfaces/jwt-payload.interface';
-import { Injectable, UnauthorizedException, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, NotFoundException, BadRequestException, HttpException, ForbiddenException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { sign } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 import { User } from 'src/features/user/interfaces/user.interface';
 import { RefreshToken } from './interfaces/refresh-token.interface';
 import { v4 } from 'uuid';
@@ -22,6 +22,24 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {
     this.cryptr = new Cryptr(process.env.ENCRYPT_JWT_SECRET);
+  }
+
+
+  async generateEmailToken() {
+    const code = this.generateRandomCode();
+    const token = sign({code}, process.env.JWT_SECRET , { expiresIn: process.env.JWT_EXPIRATION });
+    return { code, token };
+  }
+
+  async verifyToken(token: string) {
+    try {
+      return verify(token, process.env.JWT_SECRET) as JwtPayload;
+    } catch (error) {
+      if (error.name === "TokenExpiredError") {
+        throw new BadRequestException('驗證碼已過期');
+      }
+      throw error
+    }
   }
 
   async createAccessToken(userId: string) {
@@ -82,6 +100,7 @@ export class AuthService {
       }
   }
     return token;
+  
 }
 
   // ***********************
@@ -108,4 +127,17 @@ export class AuthService {
   encryptText(text: string): string {
     return this.cryptr.encrypt(text);
   }
+
+  generateRandomCode = () => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    let code = '';
+
+    for (let i = 0; i < 6; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        code += characters.charAt(randomIndex);
+    }
+
+    return code;
+};
 }

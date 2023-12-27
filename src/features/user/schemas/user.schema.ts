@@ -51,6 +51,9 @@ export class User extends Document implements IUser {
   @Prop({ default: 0 })
   loginAttempts: number;
 
+  @Prop({ default: 0 })
+  loginCount: number;
+
   @Prop({ default: Date.now() })
   blockExpires: Date;
 

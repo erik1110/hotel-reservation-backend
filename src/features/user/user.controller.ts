@@ -18,6 +18,7 @@ import {
     } from '@nestjs/swagger';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { EmailDto } from './dto/email.dto';
 
 @ApiTags('User')
 @Controller('user')
@@ -47,20 +48,20 @@ export class UserController {
         return await this.userService.create(createUserDto);
     }
 
-    @Post('verify-email')
-    @HttpCode(HttpStatus.OK)
-    @ApiOperation({summary: 'Verify Email',})
-    @ApiOkResponse({})
-    async verifyEmail(@Req() req: Request, @Body() verifyUuidDto: VerifyUuidDto) {
-        return await this.userService.verifyEmail(req, verifyUuidDto);
-    }
-
     @Post('refresh-access-token')
     @HttpCode(HttpStatus.CREATED)
     @ApiOperation({summary: 'Refresh Access Token with refresh token',})
     @ApiCreatedResponse({})
     async refreshAccessToken(@Body() refreshAccessTokenDto: RefreshAccessTokenDto) {
         return await this.userService.refreshAccessToken(refreshAccessTokenDto);
+    }
+
+    @Post('verify/generateEmailCode')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({summary: 'Verify Email'})
+    @ApiOkResponse({})
+    async verifyYouEmail(@Req() req: Request, @Body() emailDto: EmailDto) {
+        return await this.userService.generateEmail(req, emailDto);
     }
 
     @Post('forgot-password')
