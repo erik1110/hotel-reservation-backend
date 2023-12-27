@@ -30,7 +30,16 @@ export class UserController {
     // ╔═╗╦ ╦╔╦╗╦ ╦╔═╗╔╗╔╔╦╗╦╔═╗╔═╗╔╦╗╔═╗
     // ╠═╣║ ║ ║ ╠═╣║╣ ║║║ ║ ║║  ╠═╣ ║ ║╣
     // ╩ ╩╚═╝ ╩ ╩ ╩╚═╝╝╚╝ ╩ ╩╚═╝╩ ╩ ╩ ╚═╝
-    @Post()
+
+    @Post('login')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({summary: 'Login User',})
+    @ApiOkResponse({})
+    async login(@Req() req: Request, @Body() loginUserDto: LoginUserDto) {
+        return await this.userService.login(req, loginUserDto);
+    }
+
+    @Post('/signup')
     @HttpCode(HttpStatus.CREATED)
     @ApiOperation({summary: 'Register user',})
     @ApiCreatedResponse({})
@@ -44,14 +53,6 @@ export class UserController {
     @ApiOkResponse({})
     async verifyEmail(@Req() req: Request, @Body() verifyUuidDto: VerifyUuidDto) {
         return await this.userService.verifyEmail(req, verifyUuidDto);
-    }
-
-    @Post('login')
-    @HttpCode(HttpStatus.OK)
-    @ApiOperation({summary: 'Login User',})
-    @ApiOkResponse({})
-    async login(@Req() req: Request, @Body() loginUserDto: LoginUserDto) {
-        return await this.userService.login(req, loginUserDto);
     }
 
     @Post('refresh-access-token')

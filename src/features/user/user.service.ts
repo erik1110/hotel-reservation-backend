@@ -32,11 +32,12 @@ export class UserService {
     // │  ├┬┘├┤ ├─┤ │ ├┤   │ │└─┐├┤ ├┬┘
     // └─┘┴└─└─┘┴ ┴ ┴ └─┘  └─┘└─┘└─┘┴└─
     async create(createUserDto: CreateUserDto): Promise<User> {
+        await this.isEmailUnique(createUserDto.email);
         const user = new this.userModel(createUserDto);
-        await this.isEmailUnique(user.email);
-        this.setRegistrationInfo(user);
+        user.password =  await bcrypt.hash(user.password, 12);
         await user.save();
-        return this.buildRegistrationInfo(user);
+        const token = await this.authService.createAccessToken(user._id);
+        return this.buildRegistrationInfo(user, token);
     }
 
     // ┬  ┬┌─┐┬─┐┬┌─┐┬ ┬  ┌─┐┌┬┐┌─┐┬┬
@@ -46,7 +47,7 @@ export class UserService {
         const user = await this.findByVerification(verifyUuidDto.verification);
         await this.setUserAsVerified(user);
         return {
-            fullName: user.fullName,
+            name: user.name,
             email: user.email,
             accessToken: await this.authService.createAccessToken(user._id),
             refreshToken: await this.authService.createRefreshToken(req, user._id),
@@ -62,7 +63,7 @@ export class UserService {
         await this.checkPassword(loginUserDto.password, user);
         await this.passwordsAreMatch(user);
         return {
-            fullName: user.fullName,
+            name: user.name,
             email: user.email,
             accessToken: await this.authService.createAccessToken(user._id),
             refreshToken: await this.authService.createRefreshToken(req, user._id),
@@ -133,22 +134,17 @@ export class UserService {
     // ********************************************
 
     private async isEmailUnique(email: string) {
-        const user = await this.userModel.findOne({email, verified: true});
+        const user = await this.userModel.findOne({email});
         if (user) {
             throw new BadRequestException('Email most be unique.');
         }
     }
 
-    private setRegistrationInfo(user): any {
-        user.verification = v4();
-        user.verificationExpires = addHours(new Date(), this.HOURS_TO_VERIFY);
-    }
-
-    private buildRegistrationInfo(user): any {
+    private buildRegistrationInfo(user, token:string): any {
         const userRegistrationInfo = {
-            fullName: user.fullName,
+            name: user.name,
             email: user.email,
-            verified: user.verified,
+            token: token,
         };
         return userRegistrationInfo;
     }

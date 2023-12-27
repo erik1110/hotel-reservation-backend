@@ -8,7 +8,6 @@ import { ArticleModule } from './features/article/article.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    UsersModule,
     MongooseModule.forRoot(process.env.DATABASE),
     UserModule,
     ArticleModule,

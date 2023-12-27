@@ -1,63 +1,59 @@
-import * as mongoose from 'mongoose';
-import * as validator from 'validator';
-import * as bcrypt from 'bcrypt';
-import { isEmail, isUUID } from 'class-validator';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+import { raw } from '@nestjs/mongoose';
+export interface IUser extends Document {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  birthday: Date;
+  address: {
+    zipcode: number;
+    county: string;
+    city: string;
+  };
+  verificationToken: string;
+}
 
-export const UserSchema = new mongoose.Schema ({
-    fullName: {
-        type: String,
-        minlength: 6,
-        maxlength: 255,
-        required: [true, 'NAME_IS_BLANK'],
-    },
-    email: {
-        type: String,
-        lowercase: true,
-        validate: isEmail,
-        maxlength: 255,
-        minlength: 6,
-        required: [true, 'EMAIL_IS_BLANK'],
-    },
-    password: {
-        type: String,
-        minlength: 5,
-        maxlength: 1024,
-        required: [true, 'PASSWORD_IS_BLANK'],
-    },
-    bankAccountNumber: {
-        type: String,
-        maxlength: 32,
-    },
-    bankAccountOwnerName: {
-        type: String,
-        minlength: 6,
-        maxlength: 255,
-    },
-    roles: {
-        type: [String],
-        default: ['user'],
-    },
-    verification: {
-        type: String,
-        validate: isUUID,
-    },
-    verified: {
-        type: Boolean,
-        default: false,
-    },
-    verificationExpires: {
-        type: Date,
-        default: Date.now,
-    },
-    loginAttempts: {
-        type: Number,
-        default: 0,
-    },
-    blockExpires: {
-      type: Date,
-      default: Date.now,
-    },
-}, {
-    versionKey: false,
-    timestamps: true,
-});
+@Schema({ timestamps: true, versionKey: false })
+export class User extends Document implements IUser {
+  @Prop({ required: [true, 'name 未填寫'],})
+  name: string;
+
+  @Prop({ unique: true, required: [true, 'email 未填寫']})
+  email: string;
+
+  @Prop({ required: [true, 'password 未填寫'], select: false })
+  password: string;
+
+  @Prop({ required: [true, 'phone 未填寫'] })
+  phone: string;
+
+  @Prop({ required: [true, 'birthday 未填寫'] })
+  birthday: Date;
+
+  @Prop(raw({
+      zipcode: { type: Number, required: [true, 'zipcode 未填寫'] },
+      county: { type: String, required: [true, 'county 未填寫'] },
+      city: { type: String, required: [true, 'city 未填寫'] },
+  }))
+  address: {
+    zipcode: number;
+    county: string;
+    city: string;
+  };
+  @Prop({ type: String, default: '', select: false })
+  verificationToken: string;
+
+  @Prop({ default: ['user'] })
+  roles: [String];
+
+  @Prop({ default: 0 })
+  loginAttempts: number;
+
+  @Prop({ default: Date.now() })
+  blockExpires: Date;
+
+}
+
+export const UserSchema = SchemaFactory.createForClass(User);
