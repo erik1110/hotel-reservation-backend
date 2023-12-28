@@ -18,7 +18,6 @@ export const resErrorProd = (err: any, res: any) => {
     name: '',
     message: '',
   };
-  console.log("err:", err)
   if (err.isOperational) {
     resErrorData.message = err.message;
     resErrorData.name = err.name;
@@ -41,6 +40,7 @@ export class ErrorHandlerFilter implements ExceptionFilter {
 
     // dev
     if (process.env.NODE_ENV === 'dev') {
+      
       return resErrorDev(err, response);
     }
     // production

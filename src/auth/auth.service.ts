@@ -31,7 +31,6 @@ export class AuthService {
   }
 
   async verifyToken(token: string) {
-    console.log("verifyToken")
     try {
       return verify(token, process.env.JWT_SECRET) as JwtPayload;
     } catch (error) {

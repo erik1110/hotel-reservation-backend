@@ -2,7 +2,7 @@
 import { CreateForgotPasswordDto, CreateForgotPasswordSuccessDto } from './dto/create-forgot-password.dto';
 import { Request } from 'express';
 import { LoginSuccessDto, LoginUserDto } from './dto/login-user.dto';
-import { Controller, Get, Post, Body, UseGuards, Req, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Req, HttpCode, HttpStatus, Put } from '@nestjs/common';
 import { CreateSuccessDto, CreateUserDto, UserSuccessDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -13,9 +13,9 @@ import {
     ApiBearerAuth,
     ApiOperation,
     } from '@nestjs/swagger';
-import { Roles } from 'src/auth/decorators/roles.decorator';
 import { EmailDto, GenerateEmailSuccessDto } from './dto/email.dto';
 import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
+import { UpdateUserDto, UpdateUserSuccessDto } from './dto/update-user.dto';
 
 @ApiTags('User - 使用者')
 @ApiErrorDecorator(HttpStatus.INTERNAL_SERVER_ERROR, 'CriticalError', '系統錯誤，請洽系統管理員')
@@ -45,14 +45,6 @@ export class UserController {
     async register(@Body() createUserDto: CreateUserDto) {
         return await this.userService.create(createUserDto);
     }
-
-    // @Post('refresh-access-token')
-    // @HttpCode(HttpStatus.CREATED)
-    // @ApiOperation({summary: 'Refresh Access Token with refresh token',})
-    // @ApiCreatedResponse({})
-    // async refreshAccessToken(@Body() refreshAccessTokenDto: RefreshAccessTokenDto) {
-    //     return await this.userService.refreshAccessToken(refreshAccessTokenDto);
-    // }
 
     @Post('verify/generateEmailCode')
     @HttpCode(HttpStatus.OK)
@@ -92,15 +84,14 @@ export class UserController {
         return { status: true};
     }
 
-    @Get('data')
-    @UseGuards(AuthGuard('jwt'))
-    @Roles('admin')
-    @ApiBearerAuth()
-    @ApiOperation({summary: 'A private route for check the auth',})
+    @Put('')
     @HttpCode(HttpStatus.OK)
-    @ApiOkResponse({})
-    findAll() {
-        return this.userService.findAll();
+    @ApiOperation({summary: '更新使用者資訊 Update user information'})
+    @ApiOkResponse({ type: UpdateUserSuccessDto})
+    @ApiErrorDecorator(HttpStatus.UNAUTHORIZED, 'UnauthorizedException', 'Unauthorized')
+    @UseGuards(AuthGuard('jwt'))
+    @ApiBearerAuth()
+    async updateUser(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {
+        return await this.userService.updateProfile(req, updateUserDto);
     }
-
 }

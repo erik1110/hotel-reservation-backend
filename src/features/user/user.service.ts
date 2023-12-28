@@ -1,23 +1,19 @@
-import { ResetPasswordDto } from './dto/reset-password.dto';
 import { Request } from 'express';
 import { AuthService } from '../../auth/auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
-import { Injectable, BadRequestException, NotFoundException, ConflictException, ForbiddenException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { v4 } from 'uuid';
 import { addHours } from 'date-fns';
 import * as bcrypt from 'bcrypt';
 import { CreateForgotPasswordDto } from './dto/create-forgot-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
-import { VerifyUuidDto } from './dto/verify-uuid.dto';
-import { RefreshAccessTokenDto } from './dto/refresh-access-token.dto';
-import { ForgotPassword } from './interfaces/forgot-password.interface';
 import { User } from './interfaces/user.interface';
 import { EmailDto } from './dto/email.dto';
 import * as nodemailer from 'nodemailer';
 import { getHttpResponse } from 'src/utils/successHandler';
 import { AppError } from 'src/utils/appError';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -28,7 +24,6 @@ export class UserService {
 
     constructor(
         @InjectModel('User') private readonly userModel: Model<User>,
-        @InjectModel('ForgotPassword') private readonly forgotPasswordModel: Model<ForgotPassword>,
         private readonly authService: AuthService,
         ) {}
 
@@ -155,6 +150,30 @@ export class UserService {
         })
     }
 
+    async updateProfile(req: Request, updateUserDto: UpdateUserDto) {
+        const { name, phone, birthday, address, oldPassword, newPassword } = updateUserDto;
+        const user = await this.findUserByEmail(req["user"].email);
+        await this.checkPassword(oldPassword, user);
+        const result = await this.userModel.findByIdAndUpdate(
+            user._id,
+            {
+                password: await bcrypt.hash(newPassword, 12),
+                name: name,
+                phone: phone,
+                birthday: birthday,
+                address: address
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        return getHttpResponse.successResponse({
+            message: '更新使用者資訊',
+        })
+    }
+
     // ********************************************
     // ╔═╗╦═╗╦╦  ╦╔═╗╔╦╗╔═╗  ╔╦╗╔═╗╔╦╗╦ ╦╔═╗╔╦╗╔═╗
     // ╠═╝╠╦╝║╚╗╔╝╠═╣ ║ ║╣   ║║║║╣  ║ ╠═╣║ ║ ║║╚═╗
@@ -214,7 +233,6 @@ export class UserService {
       }
 
     private isUserBlocked(user) {
-        console.log(user.blockExpires > Date.now())
         if (user.blockExpires > Date.now()) {
             throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '該帳號封鎖中，請稍後再試');
         }
@@ -239,6 +257,8 @@ export class UserService {
         user.loginCount += 1
         await user.save();
     }
+
+
 
     private async getTransporter() {
         const { EMAILER_USER, EMAILER_PASSWORD } = process.env;

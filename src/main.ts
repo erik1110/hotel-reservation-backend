@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { ErrorHandlerFilter } from './utils/errorHandler';
 import { NestFactory } from '@nestjs/core';
@@ -5,6 +6,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.setGlobalPrefix('api/v1');
   app.useGlobalFilters(new ErrorHandlerFilter());
   const config = new DocumentBuilder()
