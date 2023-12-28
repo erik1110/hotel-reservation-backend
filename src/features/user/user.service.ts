@@ -48,11 +48,12 @@ export class UserService {
     //  └┘ └─┘┴└─┴└   ┴   └─┘┴ ┴┴ ┴┴┴─┘
 
     async generateEmail(req: Request, emailDto: EmailDto) {
-        const message = { message: '信件已寄出'}
         const email = emailDto.email
         const isEmailExists = await this.isEmailExists(email)
         if (!isEmailExists){
-            return message
+            return getHttpResponse.successResponse({
+                message: "信件已寄出",
+            })
         }
         const { code, token } = await this.authService.generateEmailToken();
         const user = await this.userModel.findOneAndUpdate(
@@ -86,7 +87,9 @@ export class UserService {
                 `
             });
         }
-        return message;
+        return getHttpResponse.successResponse({
+            message: "信件已寄出",
+        })
     }
 
     // ┬  ┌─┐┌─┐┬┌┐┌
@@ -115,7 +118,7 @@ export class UserService {
         const user = await this.findByEmail(createForgotPasswordDto.email);
         const verificationToken = user.verificationToken
         if (verificationToken===''){
-            throw new BadRequestException('尚未寄信');
+            throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '尚未寄信');
         }
         const payload = await this.authService.verifyToken(verificationToken);
         if (payload["code"] === createForgotPasswordDto.code) {
@@ -130,7 +133,7 @@ export class UserService {
                 }
             );
         } else {
-            throw new BadRequestException('錯誤的驗證碼');
+            throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '錯誤的信箱或驗證碼');
         }
 
         return getHttpResponse.successResponse({
@@ -172,14 +175,14 @@ export class UserService {
     private async isEmailUnique(email: string) {
         const user = await this.userModel.findOne({email});
         if (user) {
-            throw new AppError(HttpStatus.BAD_REQUEST, 'User', '該信箱被註冊');
+            throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '該信箱被註冊');
         }
     }
 
     private async findByEmail(email: string): Promise<User> {
         const user = await this.userModel.findOne({email}).select('+verificationToken');;
         if (!user) {
-            throw new AppError(HttpStatus.BAD_REQUEST, 'User', '錯誤的信箱');
+            throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '錯誤的信箱或驗證碼');
         }
         return user;
     }
@@ -196,7 +199,7 @@ export class UserService {
     private async findUserByEmail(email: string): Promise<User> {
         const user = await this.userModel.findOne({email}).select('+password');
         if (!user) {
-          throw new AppError(HttpStatus.BAD_REQUEST, 'User', '錯誤的信箱或密碼');
+          throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '錯誤的信箱或密碼');
         }
         return user;
       }
@@ -205,7 +208,7 @@ export class UserService {
         const match = await bcrypt.compare(attemptPass, user.password);
         if (!match) {
             await this.passwordsDoNotMatch(user);
-            throw new AppError(HttpStatus.BAD_REQUEST, 'User', '錯誤的信箱或密碼');
+            throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '錯誤的信箱或密碼');
         }
         return match;
       }
@@ -213,7 +216,7 @@ export class UserService {
     private isUserBlocked(user) {
         console.log(user.blockExpires > Date.now())
         if (user.blockExpires > Date.now()) {
-            throw new AppError(HttpStatus.BAD_REQUEST, 'User', '該帳號封鎖中，請稍後再試');
+            throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '該帳號封鎖中，請稍後再試');
         }
     }
 
@@ -222,7 +225,7 @@ export class UserService {
         await user.save();
         if (user.loginAttempts >= this.LOGIN_ATTEMPTS_TO_BLOCK) {
             await this.blockUser(user);
-            throw new AppError(HttpStatus.BAD_REQUEST, 'User', '錯誤嘗試多次，封鎖該帳號');
+            throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '錯誤嘗試多次，封鎖該帳號');
         }
     }
 

@@ -46,3 +46,11 @@ export class CreateForgotPasswordDto {
     @MaxLength(1024)
     readonly newPassword: string;
   }
+
+  export class CreateForgotPasswordSuccessDto {
+    @ApiProperty({ example: true})
+    status: boolean;
+  
+    @ApiProperty({ example: '修改密碼成功'})
+    message: string;
+  }

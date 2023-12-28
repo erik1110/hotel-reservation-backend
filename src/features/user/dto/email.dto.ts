@@ -17,3 +17,13 @@ export class EmailDto {
   @IsEmail()
   readonly email: string;
 }
+
+export class GenerateEmailSuccessDto {
+  @ApiProperty({ example: true})
+  status: boolean;
+
+  @ApiProperty({ example: '信件已寄出'})
+  message: string;
+
+}
+  

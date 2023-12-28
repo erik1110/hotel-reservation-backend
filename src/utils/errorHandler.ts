@@ -25,7 +25,7 @@ export const resErrorProd = (err: any, res: any) => {
     res.status(err.statusCode).json(resErrorData);
   } else {
     console.error('出現重大錯誤', err);
-    resErrorData.name = '出現重大錯誤';
+    resErrorData.name = 'CriticalError';
     resErrorData.message = '系統錯誤，請洽系統管理員';
     res.status(err.statusCode).json(resErrorData);
   }
