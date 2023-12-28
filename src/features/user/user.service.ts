@@ -145,6 +145,13 @@ export class UserService {
         return {hello: 'world'};
       }
 
+    async getProfile(req: Request) {
+        return getHttpResponse.successResponse({
+            message: '取得使用者資訊',
+            data:  req["user"]
+        })
+    }
+
     // ********************************************
     // ╔═╗╦═╗╦╦  ╦╔═╗╔╦╗╔═╗  ╔╦╗╔═╗╔╦╗╦ ╦╔═╗╔╦╗╔═╗
     // ╠═╝╠╦╝║╚╗╔╝╠═╣ ║ ║╣   ║║║║╣  ║ ╠═╣║ ║ ║║╚═╗

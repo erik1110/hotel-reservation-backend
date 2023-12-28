@@ -1,4 +1,6 @@
-import { Catch, ArgumentsHost, HttpStatus, ExceptionFilter, HttpException } from '@nestjs/common';
+import { Catch, ArgumentsHost, HttpStatus, ExceptionFilter } from '@nestjs/common';
+
+const handledErrors = ['BadRequestException', 'UnauthorizedException'];
 
 export const resErrorDev = (err: any, res: any) => {
   res.status(err.statusCode).json({
@@ -42,7 +44,7 @@ export class ErrorHandlerFilter implements ExceptionFilter {
       return resErrorDev(err, response);
     }
     // production
-    if (err.name === 'BadRequestException') {
+    if (handledErrors.includes(err.name)) {
       err.message = err.response.message;
       err.isOperational = true;
       return resErrorProd(err, response);

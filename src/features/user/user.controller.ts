@@ -1,14 +1,11 @@
 
-import { ResetPasswordDto } from './dto/reset-password.dto';
 import { CreateForgotPasswordDto } from './dto/create-forgot-password.dto';
 import { Request } from 'express';
 import { LoginUserDto } from './dto/login-user.dto';
-import { Controller, Get, Post, Body, UseGuards, Req, HttpCode, HttpStatus, Request as NestRequest } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Req, HttpCode, HttpStatus, BadRequestException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { VerifyUuidDto } from './dto/verify-uuid.dto';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
-import { RefreshAccessTokenDto } from './dto/refresh-access-token.dto';
 import {
     ApiCreatedResponse,
     ApiOkResponse,
@@ -16,13 +13,11 @@ import {
     ApiBearerAuth,
     ApiOperation,
     } from '@nestjs/swagger';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { EmailDto } from './dto/email.dto';
 
 @ApiTags('User')
 @Controller('user')
-@UseGuards(RolesGuard)
 export class UserController {
     constructor(
         private readonly userService: UserService,
@@ -72,17 +67,23 @@ export class UserController {
         return await this.userService.forgotPassword(req, createForgotPasswordDto);
     }
 
-    // @Get('')
-    // @Roles("user")
-    // @UseGuards(AuthGuard('jwt'))
-    // @ApiBearerAuth()
-    // @HttpCode(HttpStatus.OK)
-    // @ApiOperation({summary: '取得使用者資訊 Get user information'})
-    // @ApiOkResponse({})
-    // async getUser(@Req() req: Request) {
-    //     const user = req.user;
-    //     return await this.userService.getUser(req);
-    // }
+    @UseGuards(AuthGuard('jwt'))
+    @ApiBearerAuth()
+    @ApiOperation({summary: '取得使用者資訊 Get user information'})
+    @HttpCode(HttpStatus.OK)
+    @Get('')
+    async getProfile(@Req() req: Request) {
+        return await this.userService.getProfile(req);
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @ApiBearerAuth()
+    @ApiOperation({summary: '確認使用者是否登入 Get user information'})
+    @HttpCode(HttpStatus.OK)
+    @Get('check')
+    async check() {
+        return { status: true};
+    }
 
     @Get('data')
     @UseGuards(AuthGuard('jwt'))
@@ -92,15 +93,7 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({})
     findAll() {
-            
         return this.userService.findAll();
     }
 
-    @UseGuards(AuthGuard('jwt'))
-    @ApiBearerAuth()
-    @Get('profile')
-    getProfile(@NestRequest() req) {
-      console.log("req:", req)
-      return req.user;
-    }
 }

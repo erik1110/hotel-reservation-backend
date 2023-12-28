@@ -48,9 +48,7 @@ export class AuthService {
   }
 
   async validateUser(jwtPayload: JwtPayload): Promise<any> {
-    console.log("validateUser")
     const user = await this.userModel.findOne({_id: jwtPayload.userId});
-    console.log("user:", user)
     if (!user) {
       throw new UnauthorizedException('User not found.');
     }
@@ -77,7 +75,6 @@ export class AuthService {
       try {
         token = cryptr.decrypt(token);
       } catch (err) {
-        console.log(err)
         throw new BadRequestException('Bad request.');
       }
   }
