@@ -11,6 +11,13 @@ const longDescription = `以竹葉為背景，一塊塊坍塌的黑白豆腐，�
 再來只要將木筐迅速抬起，線網便會把豆腐切成一塊一塊，
 最後把竹葉抽掉即可。`;
 
+const longDescription2 = `生魚片竟反射出自己的臉孔…一陳強烈的極地北風爽快地劃過了口中
+…有如置身「藍色天國」的快感！
+以驚人的刀工切出像鏡子一樣晶瑩剔透的魚片，
+貼在冰山上，再沾上加有麻油的醬品嚐，在一剎那的清涼後，
+嘴裡的溫度把鯛魚圓潤的美味往整個口腔裡蔓延出來了！
+原本凍結住的鯛魚生命再次復甦，像是在口中奔騰飛躍！`;
+
 export class CreateCulinaryDto {
     @ApiProperty({
       example: '大魔術熊貓豆腐',
@@ -40,6 +47,37 @@ export class CreateCulinaryDto {
     @IsNotEmpty({ message: 'image 未填寫' })
     @Matches(/^https:/, { message: 'image 必須以 https 開頭' })
     image: string;
+}
+
+export class UpdateCulinaryDto {
+  @ApiProperty({
+    example: '烈冰鮮鯛山',
+    description: 'Title',
+  })
+  @IsNotEmpty({ message: 'title 未填寫' })
+  title: string;
+
+  @ApiProperty({
+    example: longDescription2.replace(/(\r\n|\r|\n)/g, ' ').replace(/\s+/g, ' '),
+    description: 'Description',
+})
+  @IsNotEmpty({ message: 'description 未填寫' })
+  description: string;
+
+  @ApiProperty({
+    example: 'SUN-MON 13:00-22:30',
+    description: 'DiningTime',
+  })
+  @IsNotEmpty({ message: 'diningTime 未填寫' })
+  diningTime: string;
+
+  @ApiProperty({
+    example: 'https://fakeimg.pl/300/',
+    description: 'image 未填寫',
+  })
+  @IsNotEmpty({ message: 'image 未填寫' })
+  @Matches(/^https:/, { message: 'image 必須以 https 開頭' })
+  image: string;
 }
 
 export class CreateCulinarySuccessDto {
@@ -72,8 +110,8 @@ export class GetCulinarySuccessDto {
 
   @ApiProperty({ example: [{
     _id: '658e628a4963529557a6561b',
-    title: '修改 - 海霸',
-    description: '修改 - 以新鮮海產料理聞名...',
+    title: '大魔術熊貓豆腐',
+    description: longDescription.replace(/(\r\n|\r|\n)/g, ' ').replace(/\s+/g, ' '),
     diningTime: 'SUN-MON 11:00-20:30',
     image: 'https://fakeimg.pl/300/',
     creator: '658b9367df4b59a38f24e143',
@@ -83,7 +121,29 @@ export class GetCulinarySuccessDto {
   })
   data: object;
 }
-  
+
+
+export class UpdateCulinarySuccessDto {
+  @ApiProperty({ example: true})
+  status: boolean;
+
+  @ApiProperty({ example: '更新美味佳餚'})
+  message: string;
+
+  @ApiProperty({ example: {
+      _id: '658e628a4963529557a6561b',
+      title: '烈冰鮮鯛山',
+      description: longDescription2.replace(/(\r\n|\r|\n)/g, ' ').replace(/\s+/g, ' '),
+      diningTime: 'SUN-MON 13:00-22:30',
+      image: 'https://fakeimg.pl/300/',
+      creator: '658b9367df4b59a38f24e143',
+      createdAt: '2023-12-27T03:00:55.922Z',
+      updatedAt: '2023-12-28T04:01:21.006Z',
+    }
+  })
+  data: object;
+}
+
 export class DeleteNewsSuccessDto {
   @ApiProperty({ example: true})
   status: boolean;

@@ -1,10 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
 import { CulinaryService } from './culinary.service';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { CreateCulinaryDto, CreateCulinarySuccessDto } from './dto/culinary.dto';
+import { CreateCulinaryDto, CreateCulinarySuccessDto, GetCulinarySuccessDto, UpdateCulinaryDto, UpdateCulinarySuccessDto } from './dto/culinary.dto';
+import { IsObjectIdPipe } from 'nestjs-object-id';
 
 
 @ApiTags('Admin/Culinary - 美味佳餚管理')
@@ -18,12 +19,34 @@ export class CulinaryController {
         private readonly culinaryService: CulinaryService,
         ) {}
 
+    @Get('')
+    @Roles('admin')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({summary: '取得所有美味佳餚 Get all delicious dishes'})
+    @ApiOkResponse({ type: GetCulinarySuccessDto })
+    async getallCulinary(@Req() req: Request) {
+        return await this.culinaryService.getallCulinary(req);
+    }
+
     @Post('')
     @Roles('admin')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({summary: '新增美味佳餚 Add a new delicious dish'})
     @ApiOkResponse({ type: CreateCulinarySuccessDto })
-    async addNews(@Req() req: Request, @Body() createCulinaryDto: CreateCulinaryDto) {
+    async addCulinary(@Req() req: Request, @Body() createCulinaryDto: CreateCulinaryDto) {
         return await this.culinaryService.createCulinary(req, createCulinaryDto);
+    }
+
+    @Put(':id')
+    @Roles('admin')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: '更新美味佳餚 Update a delicious dish' })
+    @ApiOkResponse({ type: UpdateCulinarySuccessDto })
+    async updateCulinary(
+      @Param('id', IsObjectIdPipe) id: string,
+      @Req() req: Request,
+      @Body() updateCulinaryDto: UpdateCulinaryDto,
+    ) {
+      return await this.culinaryService.updateCulinary(id, req, updateCulinaryDto);
     }
 }
