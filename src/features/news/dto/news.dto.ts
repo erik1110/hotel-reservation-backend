@@ -64,3 +64,10 @@ export class GetNewsSuccessDto {
   data: object;
 }
   
+export class DeleteNewsSuccessDto {
+  @ApiProperty({ example: true})
+  status: boolean;
+
+  @ApiProperty({ example: '刪除最新資訊'})
+  message: string;
+}
