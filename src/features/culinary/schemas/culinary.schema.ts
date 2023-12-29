@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { ICulinary } from '../interface/culinary.interface';
+import { ICulinary } from '../interfaces/culinary.interface';
 
 
 @Schema({ timestamps: true, versionKey: false })

@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { ICulinary } from './interface/culinary.interface';
+import { ICulinary } from './interfaces/culinary.interface';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { getHttpResponse } from 'src/utils/successHandler';
