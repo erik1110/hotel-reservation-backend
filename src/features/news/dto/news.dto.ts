@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, Matches } from "class-validator";
 
 export class CreateNewsDto {
     @ApiProperty({
@@ -21,6 +21,7 @@ export class CreateNewsDto {
       description: 'image 未填寫',
     })
     @IsNotEmpty({ message: 'image 未填寫' })
+    @Matches(/^https:/, { message: 'image 必須以 https 開頭' })
     image: string;
 }
 
