@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, 
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
 import { NewsService } from './news.service';
-import { CreateNewsDto, CreateNewsSuccessDto, DeleteNewsSuccessDto, GetNewsSuccessDto } from './dto/news.dto';
+import { CreateNewsDto, CreateNewsSuccessDto, DeleteNewsSuccessDto, GetNewsSuccessDto, UpdateNewsSuccessDto } from './dto/news.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { IsObjectIdPipe } from 'nestjs-object-id';
@@ -15,7 +15,7 @@ import { IsObjectIdPipe } from 'nestjs-object-id';
 @Controller('admin/news')
 export class NewsController {
     constructor(
-        private readonly adminNewsService: NewsService,
+        private readonly newsService: NewsService,
         ) {}
 
     @Get('')
@@ -24,7 +24,7 @@ export class NewsController {
     @ApiOperation({summary: '取得所有最新消息 Get all latest news'})
     @ApiOkResponse({ type: GetNewsSuccessDto })
     async getallNews(@Req() req: Request) {
-        return await this.adminNewsService.getallNews(req);
+        return await this.newsService.getallNews(req);
     }
 
     @Post('')
@@ -33,20 +33,20 @@ export class NewsController {
     @ApiOperation({summary: '新增最新消息 Add latest news'})
     @ApiOkResponse({ type: CreateNewsSuccessDto })
     async addNews(@Req() req: Request, @Body() createNewsDto: CreateNewsDto) {
-        return await this.adminNewsService.createNews(req, createNewsDto);
+        return await this.newsService.createNews(req, createNewsDto);
     }
 
     @Put(':id')
     @Roles('admin')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: '更新最新消息 Update latest news' })
-    @ApiOkResponse({ type: CreateNewsSuccessDto })
+    @ApiOkResponse({ type: UpdateNewsSuccessDto })
     async updateNews(
       @Param('id', IsObjectIdPipe) id: string,
       @Req() req: Request,
       @Body() updateNewsDto: CreateNewsDto,
     ) {
-      return await this.adminNewsService.updateNews(id, req, updateNewsDto);
+      return await this.newsService.updateNews(id, req, updateNewsDto);
     }
 
     @Delete(':id')
@@ -58,7 +58,7 @@ export class NewsController {
       @Param('id', IsObjectIdPipe) id: string,
       @Req() req: Request,
     ) {
-      return await this.adminNewsService.deleteNews(id, req);
+      return await this.newsService.deleteNews(id, req);
     }
     
 
