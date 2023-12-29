@@ -5,8 +5,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { sign, verify } from 'jsonwebtoken';
 import { User } from 'src/features/user/interfaces/user.interface';
-import { RefreshToken } from './interfaces/refresh-token.interface';
-import { v4 } from 'uuid';
 import { Request } from 'express';
 import { getClientIp } from 'request-ip';
 import * as Cryptr from 'cryptr';
