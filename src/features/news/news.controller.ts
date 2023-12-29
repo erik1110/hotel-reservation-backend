@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
-import { AdminNewsService } from './news.service';
+import { NewsService } from './news.service';
 import { CreateNewsDto, CreateNewsSuccessDto, DeleteNewsSuccessDto, GetNewsSuccessDto } from './dto/news.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -13,9 +13,9 @@ import { IsObjectIdPipe } from 'nestjs-object-id';
 @ApiErrorDecorator(HttpStatus.FORBIDDEN, 'ForbiddenException', 'Forbidden')
 @ApiErrorDecorator(HttpStatus.INTERNAL_SERVER_ERROR, 'CriticalError', '系統錯誤，請洽系統管理員')
 @Controller('admin/news')
-export class AdminNewsController {
+export class NewsController {
     constructor(
-        private readonly adminNewsService: AdminNewsService,
+        private readonly adminNewsService: NewsService,
         ) {}
 
     @Get('')

@@ -5,10 +5,9 @@ import { INews } from './interfaces/news.interface';
 import { CreateNewsDto } from './dto/news.dto';
 import { getHttpResponse } from 'src/utils/successHandler';
 import { AppError } from 'src/utils/appError';
-import { identity } from 'rxjs';
 
 @Injectable()
-export class AdminNewsService {
+export class NewsService {
     constructor(
         @InjectModel('New') private readonly newsModel: Model<INews>,
         ) {}

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AdminNewsController } from './news.controller';
-import { AdminNewsService } from './news.service';
+import { NewsController } from './news.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { NewsSchema } from './schemas/news.schema';
+import { NewsService } from './news.service';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'New', schema: NewsSchema }])],
-  controllers: [AdminNewsController],
-  providers: [AdminNewsService]
+  controllers: [NewsController],
+  providers: [NewsService]
 })
 export class NewsModule {}
