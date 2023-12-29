@@ -144,7 +144,7 @@ export class UpdateCulinarySuccessDto {
   data: object;
 }
 
-export class DeleteNewsSuccessDto {
+export class DeleteCulinarySuccessDto {
   @ApiProperty({ example: true})
   status: boolean;
 

@@ -53,4 +53,13 @@ export class CulinaryService {
                 data: result,
             })
         }
+        async deleteCulinary(id: string, req: Request) {
+            const result = await this.culinaryModel.findByIdAndDelete(id);
+            if (!result) {
+                throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此美味佳餚不存在');
+            }
+            return getHttpResponse.successResponse({
+                message: '刪除美味佳餚',
+            })
+        }
 }
