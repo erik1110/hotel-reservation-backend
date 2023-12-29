@@ -12,6 +12,7 @@ export class AdminNewsService {
 
         async createNews(req: Request, createNewsDto: CreateNewsDto): Promise<INews> {
             const news = new this.newsModel(createNewsDto);
+            news.creator = req["user"]._id;
             const result = await news.save();
             return result;
         }

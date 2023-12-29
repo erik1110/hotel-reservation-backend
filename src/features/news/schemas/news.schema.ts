@@ -13,6 +13,8 @@ export class News extends Document implements INews {
   @Prop({ required: true })
   image: string;
 
+  @Prop({ required: true })
+  creator: string;
 }
 
 export const NewsSchema = SchemaFactory.createForClass(News);

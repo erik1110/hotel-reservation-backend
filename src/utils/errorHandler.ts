@@ -1,6 +1,6 @@
 import { Catch, ArgumentsHost, HttpStatus, ExceptionFilter } from '@nestjs/common';
 
-const handledErrors = ['BadRequestException', 'UnauthorizedException'];
+const handledErrors = ['BadRequestException', 'UnauthorizedException', 'ForbiddenException'];
 
 export const resErrorDev = (err: any, res: any) => {
   res.status(err.statusCode).json({
