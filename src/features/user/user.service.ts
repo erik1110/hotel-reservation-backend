@@ -8,12 +8,12 @@ import { addHours } from 'date-fns';
 import * as bcrypt from 'bcrypt';
 import { CreateForgotPasswordDto } from './dto/create-forgot-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './interfaces/user.interface';
 import { EmailDto } from './dto/email.dto';
 import * as nodemailer from 'nodemailer';
 import { getHttpResponse } from 'src/utils/successHandler';
 import { AppError } from 'src/utils/appError';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { IUser } from './interfaces/user.interface';
 
 @Injectable()
 export class UserService {
@@ -23,14 +23,14 @@ export class UserService {
     LOGIN_ATTEMPTS_TO_BLOCK = 5;
 
     constructor(
-        @InjectModel('User') private readonly userModel: Model<User>,
+        @InjectModel('User') private readonly userModel: Model<IUser>,
         private readonly authService: AuthService,
         ) {}
 
     // ┌─┐┬─┐┌─┐┌─┐┌┬┐┌─┐  ┬ ┬┌─┐┌─┐┬─┐
     // │  ├┬┘├┤ ├─┤ │ ├┤   │ │└─┐├┤ ├┬┘
     // └─┘┴└─└─┘┴ ┴ ┴ └─┘  └─┘└─┘└─┘┴└─
-    async create(createUserDto: CreateUserDto): Promise<User> {
+    async create(createUserDto: CreateUserDto): Promise<IUser> {
         await this.isEmailUnique(createUserDto.email);
         const user = new this.userModel(createUserDto);
         user.password =  await bcrypt.hash(user.password, 12);
@@ -198,7 +198,7 @@ export class UserService {
         }
     }
 
-    private async findByEmail(email: string): Promise<User> {
+    private async findByEmail(email: string): Promise<IUser> {
         const user = await this.userModel.findOne({email}).select('+verificationToken');;
         if (!user) {
             throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '錯誤的信箱或驗證碼');
@@ -215,7 +215,7 @@ export class UserService {
         return isEmailExists;
     }
 
-    private async findUserByEmail(email: string): Promise<User> {
+    private async findUserByEmail(email: string): Promise<IUser> {
         const user = await this.userModel.findOne({email}).select('+password');
         if (!user) {
           throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '錯誤的信箱或密碼');

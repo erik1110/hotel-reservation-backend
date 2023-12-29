@@ -4,10 +4,10 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { sign, verify } from 'jsonwebtoken';
-import { User } from 'src/features/user/interfaces/user.interface';
 import { Request } from 'express';
 import { getClientIp } from 'request-ip';
 import * as Cryptr from 'cryptr';
+import { IUser } from 'src/features/user/interfaces/user.interface';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +15,7 @@ export class AuthService {
   cryptr: any;
 
   constructor(
-    @InjectModel('User') private readonly userModel: Model<User>,
+    @InjectModel('User') private readonly userModel: Model<IUser>,
     private readonly jwtService: JwtService,
   ) {
     this.cryptr = new Cryptr(process.env.ENCRYPT_JWT_SECRET);

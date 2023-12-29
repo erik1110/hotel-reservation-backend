@@ -1,19 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { raw } from '@nestjs/mongoose';
-export interface IUser extends Document {
-  name: string;
-  email: string;
-  password: string;
-  phone: string;
-  birthday: Date;
-  address: {
-    zipcode: number;
-    county: string;
-    city: string;
-  };
-  verificationToken: string;
-}
+import { IUser } from '../interfaces/user.interface';
 
 @Schema({ timestamps: true, versionKey: false })
 export class User extends Document implements IUser {
@@ -46,7 +34,7 @@ export class User extends Document implements IUser {
   verificationToken: string;
 
   @Prop({ default: ['user'] })
-  roles: [String];
+  roles: [string];
 
   @Prop({ default: 0 })
   loginAttempts: number;
