@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './features/user/user.module';
 import { ArticleModule } from './features/article/article.module';
 import { NewsModule } from './features/news/news.module';
+import { CulinaryModule } from './features/culinary/culinary.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { NewsModule } from './features/news/news.module';
     UserModule,
     ArticleModule,
     NewsModule,
+    CulinaryModule,
   ],
   controllers: [],
   providers: [],
