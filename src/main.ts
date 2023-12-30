@@ -13,12 +13,12 @@ async function bootstrap() {
     .setTitle('Hotel Reservation Backend')
     .setDescription('This is my swagger document.')
     .setVersion('1.0')
-    .addServer('http://localhost:3000', 'HTTP') // HTTP scheme
-    .addServer('https://localhost', 'HTTPS') // HTTPS scheme
+    .addServer(`http://localhost:${process.env.PORT}`, 'Local Environment')
+    .addServer(process.env.PRODUCTION_URL, 'Production') // HTTPS scheme
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api-docs', app, document);
   await app.listen(process.env.PORT);
 }
 bootstrap();

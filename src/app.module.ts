@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './features/user/user.module';
-import { ArticleModule } from './features/article/article.module';
 import { NewsModule } from './features/news/news.module';
 import { CulinaryModule } from './features/culinary/culinary.module';
 import { AppController } from './app.controller';
@@ -12,7 +11,6 @@ import { AppController } from './app.controller';
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGO_URI),
     UserModule,
-    ArticleModule,
     NewsModule,
     CulinaryModule,
   ],
