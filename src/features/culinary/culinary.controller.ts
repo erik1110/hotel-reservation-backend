@@ -13,7 +13,7 @@ import { IsObjectIdPipe } from 'nestjs-object-id';
 @ApiBearerAuth()
 @ApiErrorDecorator(HttpStatus.FORBIDDEN, 'ForbiddenException', 'Forbidden')
 @ApiErrorDecorator(HttpStatus.INTERNAL_SERVER_ERROR, 'CriticalError', '系統錯誤，請洽系統管理員')
-@Controller('admin/culinary')
+@Controller('api/v1/admin/culinary')
 export class CulinaryController {
     constructor(
         private readonly culinaryService: CulinaryService,

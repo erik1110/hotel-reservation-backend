@@ -19,7 +19,7 @@ import { UpdateUserDto, UpdateUserSuccessDto } from './dto/update-user.dto';
 
 @ApiTags('User - 使用者')
 @ApiErrorDecorator(HttpStatus.INTERNAL_SERVER_ERROR, 'CriticalError', '系統錯誤，請洽系統管理員')
-@Controller('user')
+@Controller('api/v1/user')
 export class UserController {
     constructor(
         private readonly userService: UserService,

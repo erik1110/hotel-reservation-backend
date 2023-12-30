@@ -5,6 +5,7 @@ import { UserModule } from './features/user/user.module';
 import { ArticleModule } from './features/article/article.module';
 import { NewsModule } from './features/news/news.module';
 import { CulinaryModule } from './features/culinary/culinary.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { CulinaryModule } from './features/culinary/culinary.module';
     NewsModule,
     CulinaryModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}
