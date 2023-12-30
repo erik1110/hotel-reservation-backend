@@ -1,4 +1,11 @@
-import { IsEmail, IsNotEmpty,  IsString,  IsUUID, MaxLength, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  IsUUID,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class EmailDto {
@@ -19,11 +26,9 @@ export class EmailDto {
 }
 
 export class GenerateEmailSuccessDto {
-  @ApiProperty({ example: true})
+  @ApiProperty({ example: true })
   status: boolean;
 
-  @ApiProperty({ example: '信件已寄出'})
+  @ApiProperty({ example: '信件已寄出' })
   message: string;
-
 }
-  

@@ -5,8 +5,10 @@ import { CulinarySchema } from './schemas/culinary.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'Culinary', schema: CulinarySchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: 'Culinary', schema: CulinarySchema }]),
+  ],
   controllers: [CulinaryController],
-  providers: [CulinaryService]
+  providers: [CulinaryService],
 })
 export class CulinaryModule {}
