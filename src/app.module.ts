@@ -9,7 +9,7 @@ import { CulinaryModule } from './features/culinary/culinary.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.DATABASE),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     UserModule,
     ArticleModule,
     NewsModule,
