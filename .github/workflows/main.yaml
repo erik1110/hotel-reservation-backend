@@ -30,6 +30,7 @@ jobs:
         run: |
             npm install
             npm run build --if-present
+            npm run test --if-present
         env: 
             MONGO_URI: ${{ secrets.MONGO_URI }}
             ENCRYPT_JWT_SECRET: ${{ secrets.ENCRYPT_JWT_SECRET }}
