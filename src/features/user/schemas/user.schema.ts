@@ -5,10 +5,10 @@ import { IUser } from '../interfaces/user.interface';
 
 @Schema({ timestamps: true, versionKey: false })
 export class User extends Document implements IUser {
-  @Prop({ required: [true, 'name 未填寫'],})
+  @Prop({ required: [true, 'name 未填寫'] })
   name: string;
 
-  @Prop({ unique: true, required: [true, 'email 未填寫']})
+  @Prop({ unique: true, required: [true, 'email 未填寫'] })
   email: string;
 
   @Prop({ required: [true, 'password 未填寫'], select: false })
@@ -20,11 +20,13 @@ export class User extends Document implements IUser {
   @Prop({ required: [true, 'birthday 未填寫'] })
   birthday: Date;
 
-  @Prop(raw({
+  @Prop(
+    raw({
       zipcode: { type: Number, required: [true, 'zipcode 未填寫'] },
       county: { type: String, required: [true, 'county 未填寫'] },
       city: { type: String, required: [true, 'city 未填寫'] },
-  }))
+    }),
+  )
   address: {
     zipcode: number;
     county: string;
@@ -44,7 +46,6 @@ export class User extends Document implements IUser {
 
   @Prop({ default: Date.now() })
   blockExpires: Date;
-
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

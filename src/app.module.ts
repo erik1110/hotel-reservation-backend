@@ -5,6 +5,7 @@ import { UserModule } from './features/user/user.module';
 import { NewsModule } from './features/news/news.module';
 import { CulinaryModule } from './features/culinary/culinary.module';
 import { AppController } from './app.controller';
+import { RoomModule } from './features/room/room.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AppController } from './app.controller';
     UserModule,
     NewsModule,
     CulinaryModule,
+    RoomModule,
   ],
   controllers: [AppController],
   providers: [],
