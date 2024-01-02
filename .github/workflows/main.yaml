@@ -25,12 +25,13 @@ jobs:
         with: 
           node-version: ${{ matrix.node-version }}
 
+
       - name: NPM install, build and test
-          run: |
+        run: |
             npm install
             nest run start
             npm test
-          env: 
+        env: 
             MONGO_URI: ${{ secrets.MONGO_URI }}
             ENCRYPT_JWT_SECRET: ${{ secrets.ENCRYPT_JWT_SECRET }}
             JWT_SECRET: ${{ secrets.JWT_SECRET }}
