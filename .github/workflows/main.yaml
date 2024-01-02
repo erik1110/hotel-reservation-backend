@@ -30,7 +30,7 @@ jobs:
         run: |
             npm install
             nest run start
-            npm test
+            npm run test
         env: 
             MONGO_URI: ${{ secrets.MONGO_URI }}
             ENCRYPT_JWT_SECRET: ${{ secrets.ENCRYPT_JWT_SECRET }}
