@@ -16,7 +16,7 @@ import { CreateRoomDto, CreateRoomSuccessDto } from './dto/room.dto';
   'CriticalError',
   '系統錯誤，請洽系統管理員',
 )
-@Controller('api/v1/rooms')
+@Controller('api/v1/admin/rooms')
 export class RoomController {
     constructor(private readonly roomService: RoomService) {}
 
