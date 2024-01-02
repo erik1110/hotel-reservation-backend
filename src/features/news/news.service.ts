@@ -34,7 +34,7 @@ export class NewsService {
       {
         title: updateNewsDto.title,
         description: updateNewsDto.description,
-        image: updateNewsDto.description,
+        image: updateNewsDto.image,
         creator: req['user']._id,
       },
       {
