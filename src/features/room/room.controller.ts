@@ -38,6 +38,7 @@ export class RoomController {
     async addNews(@Req() req: Request, @Body() createNewsDto: CreateRoomDto) {
       return await this.roomService.createRoom(req, createNewsDto);
     }
+
     @Put(':id')
     @Roles('admin')
     @HttpCode(HttpStatus.OK)
