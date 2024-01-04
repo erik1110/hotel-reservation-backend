@@ -6,7 +6,38 @@ import { RoomService } from './room.service';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { CreateRoomDto, CreateRoomSuccessDto, DeleteRoomSuccessDto, GetRoomSuccessDto, UpdateRoomSuccessDto } from './dto/room.dto';
 import { IsObjectIdPipe } from 'nestjs-object-id';
+import { AuthGuard } from '@nestjs/passport';
 
+
+@ApiTags('Rooms - 房型')
+@ApiErrorDecorator(
+  HttpStatus.INTERNAL_SERVER_ERROR,
+  'CriticalError',
+  '系統錯誤，請洽系統管理員',
+)
+@Controller('/api/v1/rooms')
+export class RoomController {
+  constructor(private readonly roomService: RoomService) {}
+
+  @Get('')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '取得所有房型 Get all rooms' })
+  @ApiOkResponse({ type: GetRoomSuccessDto })
+  async getallRooms(@Req() req: Request) {
+    return await this.roomService.getallRooms(req);
+  }
+
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '取得單一房型 Get a room' })
+  @ApiOkResponse({ type: GetRoomSuccessDto })
+  async getRoomById(
+    @Param('id', IsObjectIdPipe) id: string,
+    @Req() req: Request) {
+    return await this.roomService.getRoomById(id, req);
+  }
+
+}
 
 @ApiTags('Admin/Rooms - 房型管理')
 @UseGuards(RolesGuard)
@@ -18,7 +49,7 @@ import { IsObjectIdPipe } from 'nestjs-object-id';
   '系統錯誤，請洽系統管理員',
 )
 @Controller('api/v1/admin/rooms')
-export class RoomController {
+export class RoomAdminController {
     constructor(private readonly roomService: RoomService) {}
 
     @Get('')
