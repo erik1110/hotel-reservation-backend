@@ -15,9 +15,13 @@ export class OrderService {
 
     async createOrder(req: Request, createOrderDto: CreateOrderDto) {
         // 檢查房間是否存在
-        const roomExists = await this.roomModel.exists({ _id: createOrderDto.roomId });
-        if (!roomExists) {
+        const room = await this.roomModel.findOne({ _id: createOrderDto.roomId });
+        if (!room) {
             throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此房型不存在');
+        }
+        // 檢查訂房人數
+        if (createOrderDto.peopleNum > room.maxPeople) {
+            throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '超出該房型最大訂房人數');
         }
         // 檢查房間該時段是否被預訂
         const existingOrders = await this.orderModel.find({
@@ -30,7 +34,7 @@ export class OrderService {
         if (existingOrders.length > 0) {
             throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '該房型已被預定');
         }
-
+        // 建立訂單
         const order = new this.orderModel(createOrderDto);
         order.orderUserId = req['user']._id;
         order.status = 1
@@ -42,9 +46,7 @@ export class OrderService {
       }
 
     async getallOrders(req: Request) {
-        const result = await this.orderModel.find({
-            status: 1,
-        });
+        const result = await this.orderModel.find({});
         return getHttpResponse.successResponse({
             message: '取得所有訂單',
             data: result,
@@ -74,5 +76,27 @@ export class OrderService {
             data: result,
         });
     }
+
+    async deleteMyOrder(id: string, req: Request) {
+        const result = await this.orderModel.findByIdAndUpdate(
+            {
+                _id: id,
+                orderUserId: req['user']._id,
+            },
+            {
+                status: -1,
+            },
+            {
+                new: true,
+                runValidators: true
+            },
+        );
+        if (!result) {
+          throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此訂單不存在');
+        }
+        return getHttpResponse.successResponse({
+          message: '刪除訂單',
+        });
+      }
 
 }

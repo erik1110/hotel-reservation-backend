@@ -1,12 +1,13 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
 import { OrderService } from './order.service';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { CreateOrderDto, CreateOrderSuccessDto, GetOrderSuccessDto } from './dto/order.dto';
+import { CreateOrderDto, CreateOrderSuccessDto, DeleteOrderSuccessDto, GetOrderSuccessDto } from './dto/order.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { IsObjectIdPipe } from 'nestjs-object-id';
+import { DeleteRoomSuccessDto } from '../room/dto/room.dto';
 
 
 @ApiTags('Orders - 訂單')
@@ -46,6 +47,17 @@ export class OrderController {
         @Param('id', IsObjectIdPipe) id: string,
         @Req() req: Request) {
       return await this.orderService.getMyOrderDetail(id, req);
+    }
+
+    @Delete(':id')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: '刪除自己訂單 Delete My order' })
+    @ApiOkResponse({ type: DeleteOrderSuccessDto })
+    async deleteNews(
+      @Param('id', IsObjectIdPipe) id: string,
+      @Req() req: Request,
+    ) {
+      return await this.orderService.deleteMyOrder(id, req);
     }
 }
 

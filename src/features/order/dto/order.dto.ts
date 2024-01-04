@@ -110,6 +110,7 @@ export class GetOrderSuccessDto {
         orderUserId: '658b9367df4b59a38f24e143',
         createdAt: '2023-12-27T03:00:55.922Z',
         updatedAt: '2023-12-28T04:01:21.006Z',
+        status: 1,
       },
     ],
   })
