@@ -14,7 +14,7 @@ export class CreateOrderDto {
   roomId: Schema.Types.ObjectId;
 
   @ApiProperty({
-    example: '2023/06/18',
+    example: '2024/06/18',
     description: 'checkInDate',
   })
   @IsNotEmpty()
@@ -24,7 +24,7 @@ export class CreateOrderDto {
   checkInDate: Date;
 
   @ApiProperty({
-    example: '2023/06/18',
+    example: '2024/06/20',
     description: 'checkOutDate',
   })
   @IsNotEmpty()
