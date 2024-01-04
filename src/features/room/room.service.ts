@@ -13,12 +13,27 @@ export class RoomService {
     async getallRooms(req: Request) {
         const result = await this.roomModel.find({
             status: 1
-        });
+        }, '_id');
+        const ids = result.map(order => order._id.toString());
         return getHttpResponse.successResponse({
           message: '取得所有房型',
-          data: result,
+          data: ids,
         });
       }
+
+    async getRoomById(id: string, req: Request) {
+      const result = await this.roomModel.findOne({
+          _id: id,
+          status: 1
+      });
+      if (!result) {
+        throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此房型不存在');
+      }
+      return getHttpResponse.successResponse({
+        message: '取得單一房型',
+        data: result,
+      });
+    }
 
     async createRoom(req: Request, createRoomDto: CreateRoomDto) {
         const room = new this.roomModel(createRoomDto);
