@@ -33,6 +33,9 @@ export class NewsService {
     const result = await this.newsModel.findOne({
       _id: id,
     });
+    if (!result) {
+      throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此最新資訊不存在');
+    }
     return getHttpResponse.successResponse({
       message: '取得單筆最新資訊',
       data: result,

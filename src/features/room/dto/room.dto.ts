@@ -145,37 +145,50 @@ export class GetRoomSuccessDto {
 
   @ApiProperty({
     example: [
-      {
-        _id: '658e628a4963529557a6561b',
-        name: '尊爵雙人房',
-        description: '享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。',
-        imageUrl: 'https://fakeimg.pl/300/',
-        imageUrlList: ['https://fakeimg.pl/300/',
-                       'https://fakeimg.pl/301/',
-                       'https://fakeimg.pl/302/'
-        ],
-        areaInfo: '24坪',
-        bedInfo: '一張大床',
-        maxPeople: 4,
-        price: 10000,
-        status: 1,
-        facilityInfo: [
-          {
-            title: '平面電視',
-            isProvide: true,
-          }
-        ],
-        amenityInfo: [
-          {
-            title: '衛生紙',
-            isProvide: true,
-          }
-        ],
-        creator: '658b9367df4b59a38f24e143',
-        createdAt: '2023-12-27T03:00:55.922Z',
-        updatedAt: '2023-12-28T04:01:21.006Z',
-      },
+      "658e628a4963529557a6561b"
     ],
+  })
+  data: object;
+}
+
+export class GetOneRoomSuccessDto {
+  @ApiProperty({ example: true })
+  status: boolean;
+
+  @ApiProperty({ example: '取得單一房型' })
+  message: string;
+
+  @ApiProperty({
+    example: {
+      _id: '658e628a4963529557a6561b',
+      name: '尊爵雙人房',
+      description: '享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。',
+      imageUrl: 'https://fakeimg.pl/300/',
+      imageUrlList: ['https://fakeimg.pl/300/',
+                     'https://fakeimg.pl/301/',
+                     'https://fakeimg.pl/302/'
+      ],
+      areaInfo: '24坪',
+      bedInfo: '一張大床',
+      maxPeople: 4,
+      price: 10000,
+      status: 1,
+      facilityInfo: [
+        {
+          title: '平面電視',
+          isProvide: true,
+        }
+      ],
+      amenityInfo: [
+        {
+          title: '衛生紙',
+          isProvide: true,
+        }
+      ],
+      creator: '658b9367df4b59a38f24e143',
+      createdAt: '2023-12-27T03:00:55.922Z',
+      updatedAt: '2023-12-28T04:01:21.006Z',
+    },
   })
   data: object;
 }

@@ -35,6 +35,9 @@ export class CulinaryService {
     const result = await this.culinaryModel.findOne({
       _id: id,
     });
+    if (!result) {
+      throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此美味佳餚不存在');
+    }
     return getHttpResponse.successResponse({
       message: '取得單筆美味佳餚',
       data: result,
