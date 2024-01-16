@@ -173,4 +173,17 @@ export class OrderService {
           });
       }
 
+      async getMyOrderAdmin(id: string, req: Request) {
+        const result = await this.orderModel.findOne({
+            _id: id,
+        });
+        if (!result) {
+            throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此訂單不存在');
+        }
+        return getHttpResponse.successResponse({
+            message: '取得訂單詳細資料',
+            data: result,
+        });
+    }
+
 }

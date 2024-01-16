@@ -83,6 +83,17 @@ export class OrderAdminController {
       return await this.orderService.getallOrders(req);
     }
 
+    @Get(':id')
+    @Roles('admin')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: '取得訂單詳細資料 Get My Orders Detail (包含刪除狀態的訂單)' })
+    @ApiOkResponse({ type: GetOrderSuccessDto })
+    async getMyOrderDetail(
+        @Param('id', IsObjectIdPipe) id: string,
+        @Req() req: Request) {
+      return await this.orderService.getMyOrderAdmin(id, req);
+    }
+
     @Put(':id')
     @Roles('admin')
     @HttpCode(HttpStatus.OK)
