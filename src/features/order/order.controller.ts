@@ -24,7 +24,7 @@ export class OrderController {
 
     @Get('')
     @HttpCode(HttpStatus.OK)
-    @ApiOperation({ summary: '取得自己的訂單列表 Get My Orders' })
+    @ApiOperation({ summary: '取得自己的訂單列表 Get My Orders (刪除狀態訂單無法查詢)' })
     @ApiOkResponse({ type: GetOrderSuccessDto })
     async getMyOrders(@Req() req: Request) {
       return await this.orderService.getMyOrders(req);
@@ -77,9 +77,34 @@ export class OrderAdminController {
     @Get('')
     @Roles('admin')
     @HttpCode(HttpStatus.OK)
-    @ApiOperation({ summary: '取得所有訂單 Get all orders' })
+    @ApiOperation({ summary: '取得所有訂單 Get all orders (包含刪除狀態的訂單)' })
     @ApiOkResponse({ type: GetOrderSuccessDto })
-    async getallNews(@Req() req: Request) {
+    async getallOrders(@Req() req: Request) {
       return await this.orderService.getallOrders(req);
+    }
+
+    @Put(':id')
+    @Roles('admin')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: '修改訂單 Update the order' })
+    // @ApiOkResponse({ type: UpdateRoomSuccessDto })
+    async updateOrderAdmin(
+      @Param('id', IsObjectIdPipe) id: string,
+      @Req() req: Request,
+      @Body() updateOrderDto: CreateOrderDto,
+    ) {
+      return await this.orderService.updateOrderAdmin(id, req, updateOrderDto);
+    }
+
+    @Delete(':id')
+    @Roles('admin')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: '刪除訂單 Delete My order' })
+    @ApiOkResponse({ type: DeleteOrderSuccessDto })
+    async deleteOrderAdmin(
+      @Param('id', IsObjectIdPipe) id: string,
+      @Req() req: Request,
+    ) {
+      return await this.orderService.deleteOrderAdmin(id, req);
     }
 }

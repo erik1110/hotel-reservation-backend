@@ -47,9 +47,10 @@ export class OrderService {
 
     async getallOrders(req: Request) {
         const result = await this.orderModel.find({});
+        const ids = result.map(order => order._id.toString());
         return getHttpResponse.successResponse({
             message: '取得所有訂單',
-            data: result,
+            data: ids,
         });
     }
 
@@ -71,6 +72,9 @@ export class OrderService {
             _id: id,
             status: 1,
         });
+        if (!result) {
+            throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此訂單不存在或已刪除');
+        }
         return getHttpResponse.successResponse({
             message: '取得訂單詳細資料',
             data: result,
@@ -93,10 +97,80 @@ export class OrderService {
         );
         if (!result) {
           throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此訂單不存在');
+        } else if (result.status==-1) {
+            throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此訂單已被刪除');
         }
         return getHttpResponse.successResponse({
           message: '刪除訂單',
         });
+      }
+
+    async deleteOrderAdmin(id: string, req: Request) {
+        const result = await this.orderModel.findByIdAndUpdate(
+            {
+                _id: id,
+            },
+            {
+                status: -1,
+            },
+            {
+                new: true,
+                runValidators: true
+            },
+        );
+        if (!result) {
+          throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此訂單不存在');
+        } else if (result.status==-1) {
+          throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此訂單已被刪除');
+        }
+        return getHttpResponse.successResponse({
+          message: '刪除訂單',
+        });
+      }
+
+      async updateOrderAdmin(id: string, req: Request, updateOrderDto: CreateOrderDto) {
+        // 檢查房間是否存在
+        const room = await this.roomModel.findOne({ _id: updateOrderDto.roomId });
+        if (!room) {
+            throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此房型不存在');
+        }
+        // 檢查訂房人數
+        if (updateOrderDto.peopleNum > room.maxPeople) {
+            throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '超出該房型最大訂房人數');
+        }
+        // 檢查房間該時段是否被預訂
+        const existingOrders = await this.orderModel.find({
+            roomId: updateOrderDto.roomId,
+            $or: [
+                { checkInDate: { $lt: updateOrderDto.checkOutDate }, checkOutDate: { $gt: updateOrderDto.checkInDate } },
+                { checkInDate: { $lt: updateOrderDto.checkInDate }, checkOutDate: { $gt: updateOrderDto.checkOutDate } },
+            ],
+        });
+        if (existingOrders.length > 0) {
+            throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '該房型已被預定');
+        }
+        // 更新訂單
+        const result = await this.orderModel.findByIdAndUpdate(
+            id,
+            {
+              roomId: updateOrderDto.roomId,
+              checkInDate: updateOrderDto.checkInDate,
+              checkOutDate: updateOrderDto.checkOutDate,
+              peopleNum: updateOrderDto.peopleNum,
+              userInfo: updateOrderDto.userInfo,
+            },
+            {
+              new: true,
+              runValidators: true,
+            },
+          );
+          if (!result) {
+            throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此訂單不存在');
+          }
+          return getHttpResponse.successResponse({
+            message: '更新訂單',
+            data: result,
+          });
       }
 
 }
