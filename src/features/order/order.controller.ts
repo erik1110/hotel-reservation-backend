@@ -7,7 +7,6 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { CreateOrderDto, CreateOrderSuccessDto, DeleteOrderSuccessDto, GetOrderSuccessDto } from './dto/order.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { IsObjectIdPipe } from 'nestjs-object-id';
-import { DeleteRoomSuccessDto } from '../room/dto/room.dto';
 
 
 @ApiTags('Orders - 訂單')
