@@ -23,7 +23,17 @@ export class NewsService {
   async getallNews(req: Request) {
     const result = await this.newsModel.find();
     return getHttpResponse.successResponse({
-      message: '取得所有資訊',
+      message: '取得所有最新資訊',
+      data: result,
+    });
+  }
+
+  async getOneNews(id: string, req: Request) {
+    const result = await this.newsModel.findOne({
+      _id: id,
+    });
+    return getHttpResponse.successResponse({
+      message: '取得單筆最新資訊',
       data: result,
     });
   }
