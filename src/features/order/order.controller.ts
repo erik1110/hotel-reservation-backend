@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
+import { ApiErrorDecorator } from 'src/common/decorators/error/error.decorator';
 import { OrderService } from './order.service';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { CreateOrderDto, CreateOrderSuccessDto, DeleteOrderSuccessDto, GetOneOrderSuccessDto, GetOrderSuccessDto, UpdateOrderSuccessDto } from './dto/order.dto';

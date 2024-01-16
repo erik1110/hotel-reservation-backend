@@ -3,7 +3,7 @@ import { Transform, Type } from 'class-transformer';
 import { IsDate, IsNotEmpty, Matches, ValidateNested, ValidationOptions, registerDecorator } from 'class-validator';
 import { Schema } from 'mongoose';
 import { UserDto } from './user.dto';
-import { IsBefore, IsNotBeforeToday } from 'src/common/decorator/validation/dto.decorator';
+import { IsBefore, IsNotBeforeToday } from 'src/common/decorators/validation/dto.decorator';
 
 export class CreateOrderDto {
   @ApiProperty({

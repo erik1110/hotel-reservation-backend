@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
+import { ApiErrorDecorator } from 'src/common/decorators/error/error.decorator';
 import { RoomService } from './room.service';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { CreateRoomDto, CreateRoomSuccessDto, DeleteRoomSuccessDto, GetOneRoomSuccessDto, GetRoomSuccessDto, UpdateRoomSuccessDto } from './dto/room.dto';
