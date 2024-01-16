@@ -24,6 +24,7 @@ import {
   CreateNewsSuccessDto,
   DeleteNewsSuccessDto,
   GetNewsSuccessDto,
+  GetOneNewsSuccessDto,
   UpdateNewsSuccessDto,
 } from './dto/news.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
@@ -46,7 +47,7 @@ export class NewsController {
 
     @Get('')
     @HttpCode(HttpStatus.OK)
-    @ApiOperation({ summary: '取得所有最新消息' })
+    @ApiOperation({ summary: '取得所有最新消息 Get all latest news' })
     @ApiOkResponse({ type: GetNewsSuccessDto })
     async getallNews(@Req() req: Request) {
       return await this.newsService.getallNews(req);
@@ -54,8 +55,8 @@ export class NewsController {
 
     @Get(':id')
     @HttpCode(HttpStatus.OK)
-    @ApiOperation({ summary: '取得單筆最新消息' })
-    @ApiOkResponse({ type: GetNewsSuccessDto })
+    @ApiOperation({ summary: '取得單筆最新消息 Get one latest news' })
+    @ApiOkResponse({ type: GetOneNewsSuccessDto })
     async getOneNews(
       @Param('id', IsObjectIdPipe) id: string,
       @Req() req: Request) {
@@ -84,6 +85,17 @@ export class NewsAdminController {
   @ApiOkResponse({ type: GetNewsSuccessDto })
   async getallNews(@Req() req: Request) {
     return await this.newsService.getallNews(req);
+  }
+
+  @Get(':id')
+  @Roles('admin')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '取得單筆最新消息 Get one latest news' })
+  @ApiOkResponse({ type: GetOneNewsSuccessDto })
+  async getOneNews(
+    @Param('id', IsObjectIdPipe) id: string,
+    @Req() req: Request) {
+      return await this.newsService.getOneNews(id, req);
   }
 
   @Post('')

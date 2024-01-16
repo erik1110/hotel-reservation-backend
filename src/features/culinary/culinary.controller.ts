@@ -26,6 +26,7 @@ import {
   CreateCulinarySuccessDto,
   DeleteCulinarySuccessDto,
   GetCulinarySuccessDto,
+  GetOneCulinarySuccessDto,
   UpdateCulinaryDto,
   UpdateCulinarySuccessDto,
 } from './dto/culinary.dto';
@@ -55,8 +56,8 @@ export class CulinaryController {
 
     @Get(':id')
     @HttpCode(HttpStatus.OK)
-    @ApiOperation({ summary: '取得單筆美味佳餚' })
-    @ApiOkResponse({ type: GetCulinarySuccessDto })
+    @ApiOperation({ summary: '取得單筆美味佳餚 Get one delicious dish' })
+    @ApiOkResponse({ type: GetOneCulinarySuccessDto })
     async getOneCulinary(
       @Param('id', IsObjectIdPipe) id: string,
       @Req() req: Request) {
@@ -84,6 +85,17 @@ export class CulinaryAdminController {
   @ApiOkResponse({ type: GetCulinarySuccessDto })
   async getallCulinary(@Req() req: Request) {
     return await this.culinaryService.getallCulinary(req);
+  }
+
+  @Get(':id')
+  @Roles('admin')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '取得單筆美味佳餚  Get one delicious dish' })
+  @ApiOkResponse({ type: GetOneCulinarySuccessDto })
+  async getOneCulinary(
+    @Param('id', IsObjectIdPipe) id: string,
+    @Req() req: Request) {
+      return await this.culinaryService.getOneCulinary(id, req);
   }
 
   @Post('')

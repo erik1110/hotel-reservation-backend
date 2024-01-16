@@ -4,7 +4,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
 import { OrderService } from './order.service';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { CreateOrderDto, CreateOrderSuccessDto, DeleteOrderSuccessDto, GetOrderSuccessDto } from './dto/order.dto';
+import { CreateOrderDto, CreateOrderSuccessDto, DeleteOrderSuccessDto, GetOneOrderSuccessDto, GetOrderSuccessDto, UpdateOrderSuccessDto } from './dto/order.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { IsObjectIdPipe } from 'nestjs-object-id';
 
@@ -41,7 +41,7 @@ export class OrderController {
     @Get(':id')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: '取得自己訂單詳細資料 Get My Orders Detail ' })
-    @ApiOkResponse({ type: GetOrderSuccessDto })
+    @ApiOkResponse({ type: GetOneOrderSuccessDto })
     async getMyOrderDetail(
         @Param('id', IsObjectIdPipe) id: string,
         @Req() req: Request) {
@@ -87,7 +87,7 @@ export class OrderAdminController {
     @Roles('admin')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: '取得訂單詳細資料 Get My Orders Detail (包含刪除狀態的訂單)' })
-    @ApiOkResponse({ type: GetOrderSuccessDto })
+    @ApiOkResponse({ type: GetOneOrderSuccessDto })
     async getMyOrderDetail(
         @Param('id', IsObjectIdPipe) id: string,
         @Req() req: Request) {
@@ -98,7 +98,7 @@ export class OrderAdminController {
     @Roles('admin')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: '修改訂單 Update the order' })
-    // @ApiOkResponse({ type: UpdateRoomSuccessDto })
+    @ApiOkResponse({ type: UpdateOrderSuccessDto })
     async updateOrderAdmin(
       @Param('id', IsObjectIdPipe) id: string,
       @Req() req: Request,
