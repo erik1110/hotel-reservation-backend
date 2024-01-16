@@ -91,28 +91,41 @@ export class GetOrderSuccessDto {
 
   @ApiProperty({
     example: [
-      {
-        userInfo: {
-          address: {
-            zipcode: 100,
-            county: '中正區',
-            city: '臺北市',
-          },
-          name: 'john',
-          phone: '0912345678',
-          email: 'test@example.com',
-        },
-        _id: '6579516fcd9cb68b22599e9e',
-        roomId: '6593d28d455420d4f19b23f8',
-        checkInDate: '2023-06-17T16:00:00.000Z',
-        checkOutDate: '2023-06-18T16:00:00.000Z',
-        peopleNum: 2,
-        orderUserId: '658b9367df4b59a38f24e143',
-        createdAt: '2023-12-27T03:00:55.922Z',
-        updatedAt: '2023-12-28T04:01:21.006Z',
-        status: 1,
-      },
+      "658e985c1c91c1765e2972b5"
     ],
+  })
+  data: object;
+}
+
+export class GetOneOrderSuccessDto {
+  @ApiProperty({ example: true })
+  status: boolean;
+
+  @ApiProperty({ example: '取得訂單詳細資料' })
+  message: string;
+
+  @ApiProperty({
+    example: {
+      userInfo: {
+        address: {
+          zipcode: 100,
+          county: '中正區',
+          city: '臺北市',
+        },
+        name: 'john',
+        phone: '0912345678',
+        email: 'test@example.com',
+      },
+      _id: '6579516fcd9cb68b22599e9e',
+      roomId: '6593d28d455420d4f19b23f8',
+      checkInDate: '2023-06-17T16:00:00.000Z',
+      checkOutDate: '2023-06-18T16:00:00.000Z',
+      peopleNum: 2,
+      status: 1,
+      orderUserId: '658b9367df4b59a38f24e143',
+      createdAt: '2023-12-27T03:00:55.922Z',
+      updatedAt: '2023-12-28T04:01:21.006Z',
+    },
   })
   data: object;
 }

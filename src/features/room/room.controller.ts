@@ -4,7 +4,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
 import { RoomService } from './room.service';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { CreateRoomDto, CreateRoomSuccessDto, DeleteRoomSuccessDto, GetRoomSuccessDto, UpdateRoomSuccessDto } from './dto/room.dto';
+import { CreateRoomDto, CreateRoomSuccessDto, DeleteRoomSuccessDto, GetOneRoomSuccessDto, GetRoomSuccessDto, UpdateRoomSuccessDto } from './dto/room.dto';
 import { IsObjectIdPipe } from 'nestjs-object-id';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -30,7 +30,7 @@ export class RoomController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '取得單一房型 Get a room' })
-  @ApiOkResponse({ type: GetRoomSuccessDto })
+  @ApiOkResponse({ type: GetOneRoomSuccessDto })
   async getRoomById(
     @Param('id', IsObjectIdPipe) id: string,
     @Req() req: Request) {
@@ -59,6 +59,17 @@ export class RoomAdminController {
     @ApiOkResponse({ type: GetRoomSuccessDto })
     async getallNews(@Req() req: Request) {
       return await this.roomService.getallRooms(req);
+    }
+
+    @Get(':id')
+    @Roles('admin')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: '取得單一房型 Get a room' })
+    @ApiOkResponse({ type: GetOneRoomSuccessDto })
+    async getRoomById(
+      @Param('id', IsObjectIdPipe) id: string,
+      @Req() req: Request) {
+      return await this.roomService.getRoomById(id, req);
     }
 
     @Post('')

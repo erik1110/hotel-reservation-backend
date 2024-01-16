@@ -115,19 +115,32 @@ export class GetCulinarySuccessDto {
 
   @ApiProperty({
     example: [
-      {
-        _id: '658e628a4963529557a6561b',
-        title: '大魔術熊貓豆腐',
-        description: longDescription
-          .replace(/(\r\n|\r|\n)/g, ' ')
-          .replace(/\s+/g, ' '),
-        diningTime: 'SUN-MON 11:00-20:30',
-        image: 'https://fakeimg.pl/300/',
-        creator: '658b9367df4b59a38f24e143',
-        createdAt: '2023-12-27T03:00:55.922Z',
-        updatedAt: '2023-12-28T04:01:21.006Z',
-      },
+      "658e985c1c91c1765e2972b5",
     ],
+  })
+  data: object;
+}
+
+export class GetOneCulinarySuccessDto {
+  @ApiProperty({ example: true })
+  status: boolean;
+
+  @ApiProperty({ example: '取得單筆美味佳餚' })
+  message: string;
+
+  @ApiProperty({
+    example: {
+      _id: '658e628a4963529557a6561b',
+      title: '烈冰鮮鯛山',
+      description: longDescription2
+        .replace(/(\r\n|\r|\n)/g, ' ')
+        .replace(/\s+/g, ' '),
+      diningTime: 'SUN-MON 13:00-22:30',
+      image: 'https://fakeimg.pl/300/',
+      creator: '658b9367df4b59a38f24e143',
+      createdAt: '2023-12-27T03:00:55.922Z',
+      updatedAt: '2023-12-28T04:01:21.006Z',
+    },
   })
   data: object;
 }

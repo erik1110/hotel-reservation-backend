@@ -4,10 +4,9 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
 import { OrderService } from './order.service';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { CreateOrderDto, CreateOrderSuccessDto, DeleteOrderSuccessDto, GetOrderSuccessDto } from './dto/order.dto';
+import { CreateOrderDto, CreateOrderSuccessDto, DeleteOrderSuccessDto, GetOneOrderSuccessDto, GetOrderSuccessDto, UpdateOrderSuccessDto } from './dto/order.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { IsObjectIdPipe } from 'nestjs-object-id';
-import { DeleteRoomSuccessDto } from '../room/dto/room.dto';
 
 
 @ApiTags('Orders - 訂單')
@@ -25,7 +24,7 @@ export class OrderController {
 
     @Get('')
     @HttpCode(HttpStatus.OK)
-    @ApiOperation({ summary: '取得自己的訂單列表 Get My Orders' })
+    @ApiOperation({ summary: '取得自己的訂單列表 Get My Orders (刪除狀態訂單無法查詢)' })
     @ApiOkResponse({ type: GetOrderSuccessDto })
     async getMyOrders(@Req() req: Request) {
       return await this.orderService.getMyOrders(req);
@@ -42,7 +41,7 @@ export class OrderController {
     @Get(':id')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: '取得自己訂單詳細資料 Get My Orders Detail ' })
-    @ApiOkResponse({ type: GetOrderSuccessDto })
+    @ApiOkResponse({ type: GetOneOrderSuccessDto })
     async getMyOrderDetail(
         @Param('id', IsObjectIdPipe) id: string,
         @Req() req: Request) {
@@ -78,9 +77,45 @@ export class OrderAdminController {
     @Get('')
     @Roles('admin')
     @HttpCode(HttpStatus.OK)
-    @ApiOperation({ summary: '取得所有訂單 Get all orders' })
+    @ApiOperation({ summary: '取得所有訂單 Get all orders (包含刪除狀態的訂單)' })
     @ApiOkResponse({ type: GetOrderSuccessDto })
-    async getallNews(@Req() req: Request) {
+    async getallOrders(@Req() req: Request) {
       return await this.orderService.getallOrders(req);
+    }
+
+    @Get(':id')
+    @Roles('admin')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: '取得訂單詳細資料 Get My Orders Detail (包含刪除狀態的訂單)' })
+    @ApiOkResponse({ type: GetOneOrderSuccessDto })
+    async getMyOrderDetail(
+        @Param('id', IsObjectIdPipe) id: string,
+        @Req() req: Request) {
+      return await this.orderService.getMyOrderAdmin(id, req);
+    }
+
+    @Put(':id')
+    @Roles('admin')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: '修改訂單 Update the order' })
+    @ApiOkResponse({ type: UpdateOrderSuccessDto })
+    async updateOrderAdmin(
+      @Param('id', IsObjectIdPipe) id: string,
+      @Req() req: Request,
+      @Body() updateOrderDto: CreateOrderDto,
+    ) {
+      return await this.orderService.updateOrderAdmin(id, req, updateOrderDto);
+    }
+
+    @Delete(':id')
+    @Roles('admin')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: '刪除訂單 Delete My order' })
+    @ApiOkResponse({ type: DeleteOrderSuccessDto })
+    async deleteOrderAdmin(
+      @Param('id', IsObjectIdPipe) id: string,
+      @Req() req: Request,
+    ) {
+      return await this.orderService.deleteOrderAdmin(id, req);
     }
 }

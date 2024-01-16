@@ -22,6 +22,16 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+# Hotel Reservation Backend
+
+This is a hotel backend service built with NestJS, featuring user login, order management, latest news, delicious dishes, room type management, and including admin functionalities.
+
+This project set up Swagger docs, utilizing the Render service in conjunction with MongoDB. You can refer to the following [URL](https://hotel-reservation-backend-sgtq.onrender.com/api-docs).
+
+If you find this project appealing and decide to give it a GitHub star ⭐️, I would sincerely appreciate your support. Thank you!
+
+<img src="./image/Swagger.png">
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.

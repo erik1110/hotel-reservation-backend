@@ -24,8 +24,22 @@ export class CulinaryService {
 
   async getallCulinary(req: Request) {
     const result = await this.culinaryModel.find();
+    const ids = result.map(order => order._id.toString());
     return getHttpResponse.successResponse({
       message: '取得所有美味佳餚',
+      data: ids,
+    });
+  }
+
+  async getOneCulinary(id: string, req: Request) {
+    const result = await this.culinaryModel.findOne({
+      _id: id,
+    });
+    if (!result) {
+      throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此美味佳餚不存在');
+    }
+    return getHttpResponse.successResponse({
+      message: '取得單筆美味佳餚',
       data: result,
     });
   }
