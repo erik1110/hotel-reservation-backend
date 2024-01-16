@@ -18,7 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
+import { ApiErrorDecorator } from 'src/common/decorators/error/error.decorator';
 import { CulinaryService } from './culinary.service';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import {

@@ -17,7 +17,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
+import { ApiErrorDecorator } from 'src/common/decorators/error/error.decorator';
 import { NewsService } from './news.service';
 import {
   CreateNewsDto,

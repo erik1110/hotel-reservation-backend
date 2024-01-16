@@ -32,6 +32,43 @@ If you find this project appealing and decide to give it a GitHub star ⭐️, I
 
 <img src="./image/Swagger.png">
 
+## Directory Structure
+
+```txt
+hotel-reservation-backend
+└── src/
+    ├── auth/
+    │   ├── decorators/
+    │   ├── guards/
+    │   ├── interfaces/
+    │   ├── strategies/
+    │   ├── auth.modules.ts
+    │   └── auth.service.ts
+    ├── common/
+    │   ├── decorators/
+    │   └── dto/
+    ├── features/
+    │   ├── culinary/
+    │   ├── news/
+    │   ├── order/
+    │   ├── room/
+    │   └── user/
+    │       ├── dto
+    │       ├── interfaces
+    │       ├── schemas
+    │       ├── user.controller.ts
+    │       ├── user.module.ts
+    │       └── user.service.ts
+    ├── utils/
+    │   ├── appError.ts
+    │   ├── errorHandler.ts
+    │   ├── successHandler.ts
+    │   └── zipcodes.ts
+    ├── app.controller.ts
+    ├── app.module.ts
+    └── main.ts
+```
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.

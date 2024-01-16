@@ -30,7 +30,7 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 import { EmailDto, GenerateEmailSuccessDto } from './dto/email.dto';
-import { ApiErrorDecorator } from 'src/common/decorator/error/error.decorator';
+import { ApiErrorDecorator } from 'src/common/decorators/error/error.decorator';
 import { UpdateUserDto, UpdateUserSuccessDto } from './dto/update-user.dto';
 
 @ApiTags('User - 使用者')
