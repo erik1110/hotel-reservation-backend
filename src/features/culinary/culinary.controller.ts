@@ -30,6 +30,39 @@ import {
   UpdateCulinarySuccessDto,
 } from './dto/culinary.dto';
 import { IsObjectIdPipe } from 'nestjs-object-id';
+import { AuthGuard } from '@nestjs/passport';
+
+
+@ApiTags('Home/Culinary - 美味佳餚')
+@ApiErrorDecorator(
+  HttpStatus.INTERNAL_SERVER_ERROR,
+  'CriticalError',
+  '系統錯誤，請洽系統管理員',
+)
+@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
+@Controller('/api/v1/home/culinary')
+export class CulinaryController {
+    constructor(private readonly culinaryService: CulinaryService) {}
+
+    @Get('')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: '取得所有美味佳餚 Get all delicious dishes' })
+    @ApiOkResponse({ type: GetCulinarySuccessDto })
+    async getallCulinary(@Req() req: Request) {
+      return await this.culinaryService.getallCulinary(req);
+    }
+
+    @Get(':id')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: '取得單筆美味佳餚' })
+    @ApiOkResponse({ type: GetCulinarySuccessDto })
+    async getOneCulinary(
+      @Param('id', IsObjectIdPipe) id: string,
+      @Req() req: Request) {
+        return await this.culinaryService.getOneCulinary(id, req);
+    }
+}
 
 @ApiTags('Admin/Culinary - 美味佳餚管理')
 @UseGuards(RolesGuard)
@@ -41,7 +74,7 @@ import { IsObjectIdPipe } from 'nestjs-object-id';
   '系統錯誤，請洽系統管理員',
 )
 @Controller('api/v1/admin/culinary')
-export class CulinaryController {
+export class CulinaryAdminController {
   constructor(private readonly culinaryService: CulinaryService) {}
 
   @Get('')

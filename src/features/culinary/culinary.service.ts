@@ -30,6 +30,16 @@ export class CulinaryService {
     });
   }
 
+  async getOneCulinary(id: string, req: Request) {
+    const result = await this.culinaryModel.findOne({
+      _id: id,
+    });
+    return getHttpResponse.successResponse({
+      message: '取得單筆美味佳餚',
+      data: result,
+    });
+  }
+
   async updateCulinary(
     id: string,
     req: Request,
