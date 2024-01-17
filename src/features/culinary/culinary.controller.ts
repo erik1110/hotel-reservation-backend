@@ -87,17 +87,6 @@ export class CulinaryAdminController {
     return await this.culinaryService.getallCulinary(req);
   }
 
-  @Get(':id')
-  @Roles('admin')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: '取得單筆美味佳餚  Get one delicious dish' })
-  @ApiOkResponse({ type: GetOneCulinarySuccessDto })
-  async getOneCulinary(
-    @Param('id', IsObjectIdPipe) id: string,
-    @Req() req: Request) {
-      return await this.culinaryService.getOneCulinary(id, req);
-  }
-
   @Post('')
   @Roles('admin')
   @HttpCode(HttpStatus.OK)
