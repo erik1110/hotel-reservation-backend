@@ -11,7 +11,15 @@ async function bootstrap() {
   app.useGlobalFilters(new ErrorHandlerFilter());
   const config = new DocumentBuilder()
     .setTitle('Hotel Reservation Backend')
-    .setDescription('This is my swagger document.')
+    .setDescription(`Building a Hotel Reservation API on the Backend with TypeScript.\n\nNote: After successful login, please click on "Authorize" and enter your access token.\n\nExample Code :
+
+    fetch('/api/v1/home/news', { method: 'GET' })
+        .then(response => response.json())
+        .then(res => {
+            // { status: 'true', result: [{...}] }
+            console.log(res);
+        });
+    `)
     .setVersion('1.0')
     .addServer(`http://localhost:${process.env.PORT}`, 'Local Environment')
     .addServer(process.env.PRODUCTION_URL, 'Production') // HTTPS scheme
