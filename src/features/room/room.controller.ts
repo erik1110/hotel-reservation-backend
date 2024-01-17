@@ -61,17 +61,6 @@ export class RoomAdminController {
       return await this.roomService.getallRooms(req);
     }
 
-    @Get(':id')
-    @Roles('admin')
-    @HttpCode(HttpStatus.OK)
-    @ApiOperation({ summary: '取得單一房型 Get a room' })
-    @ApiOkResponse({ type: GetOneRoomSuccessDto })
-    async getRoomById(
-      @Param('id', IsObjectIdPipe) id: string,
-      @Req() req: Request) {
-      return await this.roomService.getRoomById(id, req);
-    }
-
     @Post('')
     @Roles('admin')
     @HttpCode(HttpStatus.OK)

@@ -87,17 +87,6 @@ export class NewsAdminController {
     return await this.newsService.getallNews(req);
   }
 
-  @Get(':id')
-  @Roles('admin')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: '取得單筆最新消息 Get one latest news' })
-  @ApiOkResponse({ type: GetOneNewsSuccessDto })
-  async getOneNews(
-    @Param('id', IsObjectIdPipe) id: string,
-    @Req() req: Request) {
-      return await this.newsService.getOneNews(id, req);
-  }
-
   @Post('')
   @Roles('admin')
   @HttpCode(HttpStatus.OK)
