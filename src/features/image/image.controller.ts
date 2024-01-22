@@ -14,8 +14,8 @@ import { getHttpResponse } from 'src/utils/successHandler';
   'CriticalError',
   '系統錯誤，請洽系統管理員',
 )
-// @UseGuards(AuthGuard('jwt'))
-// @ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 @Controller('/api/v1/image')
 export class ImageController {
     constructor(
@@ -38,7 +38,7 @@ export class ImageController {
         if (process.env.NODE_ENV === 'dev') {
             shortenUrl = `http://localhost:${process.env.PORT}/api/v1/url/`;
         } else {
-            shortenUrl = `https://${process.env.PRODUCTION_URL}/api/v1/url/`;
+            shortenUrl = `${process.env.PRODUCTION_URL}/api/v1/url/`;
         }
     
         const shortenedUrl = await this.urlService.shortenUrl(imageUrl);
