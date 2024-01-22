@@ -35,7 +35,8 @@
     "date-fns": "^3.0.6",
     "firebase-admin": "^12.0.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.3",
+    "mongoose": "^8.1.0",
+    "mongoose-auto-increment": "^5.0.1",
     "nestjs-object-id": "^1.2.0",
     "nodemailer": "^6.9.7",
     "passport": "^0.7.0",
@@ -43,6 +44,7 @@
     "reflect-metadata": "^0.1.13",
     "request-ip": "^3.3.0",
     "rxjs": "^7.8.1",
+    "shortid": "^2.2.16",
     "validator": "^13.11.0"
   },
   "devDependencies": {

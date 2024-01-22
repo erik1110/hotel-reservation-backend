@@ -8,6 +8,8 @@ import { AppController } from './app.controller';
 import { RoomModule } from './features/room/room.module';
 import { OrderModule } from './features/order/order.module';
 import { ImageModule } from './features/image/image.module';
+import { UrlService } from './features/url/url.service';
+import { UrlModule } from './features/url/url.module';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { ImageModule } from './features/image/image.module';
     CulinaryModule,
     RoomModule,
     ImageModule,
+    UrlModule,
   ],
   controllers: [AppController],
   providers: [],

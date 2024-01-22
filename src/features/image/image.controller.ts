@@ -3,10 +3,14 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageService } from './image.service';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { FileUploadDto } from './dto/fileUpload.dto';
+import { UrlService } from '../url/url.service';
 
 @Controller('image')
 export class ImageController {
-    constructor(private readonly imageService: ImageService){}
+    constructor(
+        private readonly imageService: ImageService,
+        private readonly urlService: UrlService,
+    ) {}
 
     @Post('upload')
     @UseInterceptors(FileInterceptor('file'))
@@ -17,6 +21,7 @@ export class ImageController {
     })
     async uploadImage(@UploadedFile() file){
         const imageUrl = await this.imageService.uploadImage(file);
-        return { imageUrl };
+        const shortenUrl = await this.urlService.shortenUrl(imageUrl)
+        return { shortenUrl };
     }
 }
