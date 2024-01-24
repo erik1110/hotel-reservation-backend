@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { IUrl } from './interfaces/url.interface';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import * as shortid from 'shortid';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class UrlService {
@@ -15,7 +15,7 @@ export class UrlService {
           return existingUrl.shortUrl;
         }
     
-        const shortUrl = shortid.generate();
+        const shortUrl = this.generateShortUrl(originalUrl);
         const newUrl = new this.urlModel({ originalUrl, shortUrl });
         await newUrl.save();
     
@@ -26,5 +26,10 @@ export class UrlService {
         const url = await this.urlModel.findOne({ shortUrl }).exec();
 
         return url ? url.originalUrl : null;
+    }
+
+    private generateShortUrl(originalUrl: string): string {
+      const hash = crypto.createHash('sha256').update(originalUrl).digest('hex');
+      return hash.slice(0, 8);
     }
 }
