@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Param, Redirect, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, Redirect } from '@nestjs/common';
 import { UrlService } from './url.service';
 import { ApiErrorDecorator } from 'src/common/decorators/error/error.decorator';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -16,6 +16,7 @@ export class UrlController {
 
   @Get(':shortUrl')
   @ApiOperation({ summary: '轉址短網址 Redirect short URL' })
+  @ApiErrorDecorator(HttpStatus.BAD_REQUEST, 'UserError', '無此網址或網址已失效')
   @Redirect()
   async redirectToOriginalUrl(@Param('shortUrl') shortUrl: string): Promise<{ url: string }> {
     const originalUrl = await this.urlService.getOriginalUrl(shortUrl);
