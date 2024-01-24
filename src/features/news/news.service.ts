@@ -22,7 +22,7 @@ export class NewsService {
 
   async getallNews(req: Request) {
     const result = await this.newsModel.find();
-    const ids = result.map(order => order._id.toString());
+    const ids = result.map((order) => order._id.toString());
     return getHttpResponse.successResponse({
       message: '取得所有最新資訊',
       data: ids,

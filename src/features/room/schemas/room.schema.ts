@@ -40,7 +40,6 @@ export class Room extends Document implements IRoom {
 
   @Prop({ required: true })
   creator: string;
-
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);

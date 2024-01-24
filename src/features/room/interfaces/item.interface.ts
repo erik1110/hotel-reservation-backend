@@ -1,6 +1,4 @@
-
-
 export interface IItem {
-    title: string;
-    isProvide: boolean;
+  title: string;
+  isProvide: boolean;
 }

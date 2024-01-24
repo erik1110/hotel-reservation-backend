@@ -9,7 +9,6 @@ export class Url extends Document implements IUrl {
 
   @Prop({ required: true })
   shortUrl: string;
-
 }
 
 export const UrlSchema = SchemaFactory.createForClass(Url);

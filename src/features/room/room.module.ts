@@ -7,6 +7,6 @@ import { RoomAdminController, RoomController } from './room.controller';
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'Room', schema: RoomSchema }])],
   controllers: [RoomController, RoomAdminController],
-  providers: [RoomService]
+  providers: [RoomService],
 })
 export class RoomModule {}

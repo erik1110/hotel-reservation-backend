@@ -5,9 +5,9 @@ import { UrlService } from './url.service';
 import { UrlController } from './url.controller';
 
 @Module({
-    imports: [MongooseModule.forFeature([{ name: 'Url', schema: UrlSchema }])],
-    controllers: [UrlController],
-    providers: [UrlService],
-    exports: [UrlService],
-  })
+  imports: [MongooseModule.forFeature([{ name: 'Url', schema: UrlSchema }])],
+  controllers: [UrlController],
+  providers: [UrlService],
+  exports: [UrlService],
+})
 export class UrlModule {}
