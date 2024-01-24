@@ -1,7 +1,7 @@
-import { Controller, Get, HttpStatus, Param, Post, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, HttpStatus, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageService } from './image.service';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FileUploadDto, GetImageSuccessDto } from './dto/fileUpload.dto';
 import { UrlService } from '../url/url.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -27,7 +27,7 @@ export class ImageController {
     @UseInterceptors(FileInterceptor('file'))
     @ApiConsumes('multipart/form-data')
     @ApiOperation({ summary: '上傳圖片 Upload an image' })
-    @ApiOkResponse({ type: GetImageSuccessDto })
+    @ApiCreatedResponse({ type: GetImageSuccessDto })
     @ApiBody({
         description: "網址會由該服務進行轉址 The URL will be redirected by the service.",
         type: FileUploadDto,
