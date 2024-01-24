@@ -10,8 +10,13 @@ export class ImageService {
 
     async uploadImage(file): Promise<string> {
         const maxSize = 3 * 1024 * 1024; // 3 MB in bytes
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'webp'];
         if (file.size > maxSize) {
             throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '超過 3 MB');
+        }
+        const fileExtension = file.name.split('.').pop()?.toLowerCase();
+        if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+            throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '不支援的檔案格式');
         }
         const storage = this.firebaseService.getStorageInstance();
         const bucket = storage.bucket();
