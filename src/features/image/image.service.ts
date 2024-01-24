@@ -4,17 +4,21 @@ import { v4 as uuidv4 } from 'uuid';
 import { GetSignedUrlConfig } from '@google-cloud/storage';
 import { AppError } from "src/utils/appError";
 
+const maxSize = 3 * 1024 * 1024; // 3 MB in bytes
+const allowedExtensions = ['png', 'jpg', 'jpeg', 'webp'];
+
 @Injectable()
 export class ImageService {
     constructor(private readonly firebaseService: FirebaseService){}
 
     async uploadImage(file): Promise<string> {
-        const maxSize = 3 * 1024 * 1024; // 3 MB in bytes
-        const allowedExtensions = ['png', 'jpg', 'jpeg', 'webp'];
+        if (!file || !file.originalname) {
+            throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '無效的檔案');
+        }
         if (file.size > maxSize) {
             throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '超過 3 MB');
         }
-        const fileExtension = file.name.split('.').pop()?.toLowerCase();
+        const fileExtension = file.originalname.split('.').pop()?.toLowerCase();
         if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
             throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '不支援的檔案格式');
         }
