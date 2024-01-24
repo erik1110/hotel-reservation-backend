@@ -55,7 +55,7 @@ export class CulinaryService {
         title: updateCulinaryDto.title,
         description: updateCulinaryDto.description,
         diningTime: updateCulinaryDto.diningTime,
-        image: updateCulinaryDto.description,
+        image: updateCulinaryDto.image,
         creator: req['user']._id,
       },
       {
