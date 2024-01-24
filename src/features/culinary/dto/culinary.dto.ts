@@ -114,9 +114,7 @@ export class GetCulinarySuccessDto {
   message: string;
 
   @ApiProperty({
-    example: [
-      "658e985c1c91c1765e2972b5",
-    ],
+    example: ['658e985c1c91c1765e2972b5'],
   })
   data: object;
 }

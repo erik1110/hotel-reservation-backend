@@ -2,7 +2,7 @@ import { Schema, Document } from 'mongoose';
 
 export interface IOrder extends Document {
   roomId: Schema.Types.ObjectId;
-  checkInDate: Date,
+  checkInDate: Date;
   checkOutDate: Date;
   peopleNum: number;
   orderUserId: Schema.Types.ObjectId;
@@ -11,9 +11,9 @@ export interface IOrder extends Document {
     phone: string;
     email: string;
     address: {
-        zipcode: number;
-        county: string;
-        city: string;
+      zipcode: number;
+      county: string;
+      city: string;
     };
   };
   // 可使用：1，已刪除：-1

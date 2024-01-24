@@ -16,4 +16,3 @@ export interface IRoom extends Document {
   amenityInfo: IItem[];
   creator: string;
 }
-

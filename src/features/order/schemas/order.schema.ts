@@ -7,7 +7,7 @@ export class Order extends Document implements IOrder {
   @Prop({ type: MongooseSchema.Types.ObjectId, required: true })
   roomId: MongooseSchema.Types.ObjectId;
 
-  @Prop({ type: Date, required: true})
+  @Prop({ type: Date, required: true })
   checkInDate: Date;
 
   @Prop({ type: Date, required: true })

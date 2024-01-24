@@ -1,9 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, Matches, ValidateNested, ValidationOptions, registerDecorator } from 'class-validator';
+import {
+  IsDate,
+  IsNotEmpty,
+  Matches,
+  ValidateNested,
+  ValidationOptions,
+  registerDecorator,
+} from 'class-validator';
 import { Schema } from 'mongoose';
 import { UserDto } from './user.dto';
-import { IsBefore, IsNotBeforeToday } from 'src/common/decorators/validation/dto.decorator';
+import {
+  IsBefore,
+  IsNotBeforeToday,
+} from 'src/common/decorators/validation/dto.decorator';
 
 export class CreateOrderDto {
   @ApiProperty({
@@ -47,7 +57,6 @@ export class CreateOrderDto {
   @ValidateNested({ each: true })
   @Type(() => UserDto)
   userInfo: UserDto;
-
 }
 
 export class CreateOrderSuccessDto {
@@ -90,9 +99,7 @@ export class GetOrderSuccessDto {
   message: string;
 
   @ApiProperty({
-    example: [
-      "658e985c1c91c1765e2972b5"
-    ],
+    example: ['658e985c1c91c1765e2972b5'],
   })
   data: object;
 }

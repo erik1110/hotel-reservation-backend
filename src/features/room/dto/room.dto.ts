@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsString, Matches, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsString,
+  Matches,
+  ValidateNested,
+} from 'class-validator';
 import { ItemDto } from './item.dto';
 import { Type } from 'class-transformer';
 
@@ -12,7 +18,8 @@ export class CreateRoomDto {
   name: string;
 
   @ApiProperty({
-    example: '享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。',
+    example:
+      '享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。',
     description: 'Description',
   })
   @IsNotEmpty({ message: 'description 未填寫' })
@@ -30,7 +37,7 @@ export class CreateRoomDto {
     example: [
       'https://fakeimg.pl/300/',
       'https://fakeimg.pl/301/',
-      'https://fakeimg.pl/302/'
+      'https://fakeimg.pl/302/',
     ],
     description: 'imageUrlList 未填寫',
   })
@@ -69,10 +76,12 @@ export class CreateRoomDto {
 
   @ApiProperty({
     type: ItemDto,
-    example: [{
-      title: '平面電視',
-      isProvide: true,
-    }],
+    example: [
+      {
+        title: '平面電視',
+        isProvide: true,
+      },
+    ],
     description: 'Address',
   })
   @ValidateNested({ each: true })
@@ -81,18 +90,18 @@ export class CreateRoomDto {
 
   @ApiProperty({
     type: ItemDto,
-    example: [{
-      title: '衛生紙',
-      isProvide: true,
-    }],
+    example: [
+      {
+        title: '衛生紙',
+        isProvide: true,
+      },
+    ],
     description: 'Address',
   })
   @ValidateNested({ each: true })
   @Type(() => ItemDto)
   amenityInfo: ItemDto;
 }
-
-
 
 export class CreateRoomSuccessDto {
   @ApiProperty({ example: true })
@@ -105,11 +114,13 @@ export class CreateRoomSuccessDto {
     example: {
       _id: '658e628a4963529557a6561b',
       name: '尊爵雙人房',
-      description: '享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。',
+      description:
+        '享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。',
       imageUrl: 'https://fakeimg.pl/300/',
-      imageUrlList: ['https://fakeimg.pl/300/',
-                     'https://fakeimg.pl/301/',
-                     'https://fakeimg.pl/302/'
+      imageUrlList: [
+        'https://fakeimg.pl/300/',
+        'https://fakeimg.pl/301/',
+        'https://fakeimg.pl/302/',
       ],
       areaInfo: '24坪',
       bedInfo: '一張大床',
@@ -120,13 +131,13 @@ export class CreateRoomSuccessDto {
         {
           title: '平面電視',
           isProvide: true,
-        }
+        },
       ],
       amenityInfo: [
         {
           title: '衛生紙',
           isProvide: true,
-        }
+        },
       ],
       creator: '658b9367df4b59a38f24e143',
       createdAt: '2023-12-27T03:00:55.922Z',
@@ -144,9 +155,7 @@ export class GetRoomSuccessDto {
   message: string;
 
   @ApiProperty({
-    example: [
-      "658e628a4963529557a6561b"
-    ],
+    example: ['658e628a4963529557a6561b'],
   })
   data: object;
 }
@@ -162,11 +171,13 @@ export class GetOneRoomSuccessDto {
     example: {
       _id: '658e628a4963529557a6561b',
       name: '尊爵雙人房',
-      description: '享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。',
+      description:
+        '享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。',
       imageUrl: 'https://fakeimg.pl/300/',
-      imageUrlList: ['https://fakeimg.pl/300/',
-                     'https://fakeimg.pl/301/',
-                     'https://fakeimg.pl/302/'
+      imageUrlList: [
+        'https://fakeimg.pl/300/',
+        'https://fakeimg.pl/301/',
+        'https://fakeimg.pl/302/',
       ],
       areaInfo: '24坪',
       bedInfo: '一張大床',
@@ -177,13 +188,13 @@ export class GetOneRoomSuccessDto {
         {
           title: '平面電視',
           isProvide: true,
-        }
+        },
       ],
       amenityInfo: [
         {
           title: '衛生紙',
           isProvide: true,
-        }
+        },
       ],
       creator: '658b9367df4b59a38f24e143',
       createdAt: '2023-12-27T03:00:55.922Z',
@@ -204,11 +215,13 @@ export class UpdateRoomSuccessDto {
     example: {
       _id: '658e628a4963529557a6561b',
       name: '尊爵雙人房',
-      description: '享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。',
+      description:
+        '享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。',
       imageUrl: 'https://fakeimg.pl/300/',
-      imageUrlList: ['https://fakeimg.pl/300/',
-                     'https://fakeimg.pl/301/',
-                     'https://fakeimg.pl/302/'
+      imageUrlList: [
+        'https://fakeimg.pl/300/',
+        'https://fakeimg.pl/301/',
+        'https://fakeimg.pl/302/',
       ],
       areaInfo: '24坪',
       bedInfo: '一張大床',
@@ -219,13 +232,13 @@ export class UpdateRoomSuccessDto {
         {
           title: '平面電視',
           isProvide: true,
-        }
+        },
       ],
       amenityInfo: [
         {
           title: '衛生紙',
           isProvide: true,
-        }
+        },
       ],
       creator: '658b9367df4b59a38f24e143',
       createdAt: '2023-12-27T03:00:55.922Z',

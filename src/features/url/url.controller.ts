@@ -16,15 +16,25 @@ export class UrlController {
 
   @Get(':shortUrl')
   @ApiOperation({ summary: '轉址短網址 Redirect short URL' })
-  @ApiErrorDecorator(HttpStatus.BAD_REQUEST, 'UserError', '無此網址或網址已失效')
+  @ApiErrorDecorator(
+    HttpStatus.BAD_REQUEST,
+    'UserError',
+    '無此網址或網址已失效',
+  )
   @Redirect()
-  async redirectToOriginalUrl(@Param('shortUrl') shortUrl: string): Promise<{ url: string }> {
+  async redirectToOriginalUrl(
+    @Param('shortUrl') shortUrl: string,
+  ): Promise<{ url: string }> {
     const originalUrl = await this.urlService.getOriginalUrl(shortUrl);
 
     if (originalUrl) {
       return { url: originalUrl };
     } else {
-      throw new AppError(HttpStatus.BAD_REQUEST, 'UserError', '無此網址或網址已失效');
+      throw new AppError(
+        HttpStatus.BAD_REQUEST,
+        'UserError',
+        '無此網址或網址已失效',
+      );
     }
   }
 }

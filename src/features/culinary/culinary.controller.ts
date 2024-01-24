@@ -33,7 +33,6 @@ import {
 import { IsObjectIdPipe } from 'nestjs-object-id';
 import { AuthGuard } from '@nestjs/passport';
 
-
 @ApiTags('Home/Culinary - 美味佳餚')
 @ApiErrorDecorator(
   HttpStatus.INTERNAL_SERVER_ERROR,
@@ -44,25 +43,26 @@ import { AuthGuard } from '@nestjs/passport';
 @ApiBearerAuth()
 @Controller('/api/v1/home/culinary')
 export class CulinaryController {
-    constructor(private readonly culinaryService: CulinaryService) {}
+  constructor(private readonly culinaryService: CulinaryService) {}
 
-    @Get('')
-    @HttpCode(HttpStatus.OK)
-    @ApiOperation({ summary: '取得所有美味佳餚 Get all delicious dishes' })
-    @ApiOkResponse({ type: GetCulinarySuccessDto })
-    async getallCulinary(@Req() req: Request) {
-      return await this.culinaryService.getallCulinary(req);
-    }
+  @Get('')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '取得所有美味佳餚 Get all delicious dishes' })
+  @ApiOkResponse({ type: GetCulinarySuccessDto })
+  async getallCulinary(@Req() req: Request) {
+    return await this.culinaryService.getallCulinary(req);
+  }
 
-    @Get(':id')
-    @HttpCode(HttpStatus.OK)
-    @ApiOperation({ summary: '取得單筆美味佳餚 Get one delicious dish' })
-    @ApiOkResponse({ type: GetOneCulinarySuccessDto })
-    async getOneCulinary(
-      @Param('id', IsObjectIdPipe) id: string,
-      @Req() req: Request) {
-        return await this.culinaryService.getOneCulinary(id, req);
-    }
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '取得單筆美味佳餚 Get one delicious dish' })
+  @ApiOkResponse({ type: GetOneCulinarySuccessDto })
+  async getOneCulinary(
+    @Param('id', IsObjectIdPipe) id: string,
+    @Req() req: Request,
+  ) {
+    return await this.culinaryService.getOneCulinary(id, req);
+  }
 }
 
 @ApiTags('Admin/Culinary - 美味佳餚管理')
