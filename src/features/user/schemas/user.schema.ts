@@ -25,12 +25,14 @@ export class User extends Document implements IUser {
       zipcode: { type: Number, required: [true, 'zipcode 未填寫'] },
       county: { type: String, required: [true, 'county 未填寫'] },
       city: { type: String, required: [true, 'city 未填寫'] },
+      detail: { type: String, required: [true, 'detail 未填寫'] },
     }),
   )
   address: {
     zipcode: number;
     county: string;
     city: string;
+    detail: string;
   };
   @Prop({ type: String, default: '', select: false })
   verificationToken: string;

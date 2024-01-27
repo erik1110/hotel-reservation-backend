@@ -10,6 +10,7 @@ export interface IUser extends Document {
     zipcode: number;
     county: string;
     city: string;
+    detail: string;
   };
   verificationToken: string;
   loginAttempts?: number;
