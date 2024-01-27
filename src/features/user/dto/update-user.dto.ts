@@ -47,6 +47,7 @@ export class UpdateUserDto {
     type: AddressDto,
     description: 'Address',
   })
+  @IsNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => AddressDto)
   address: AddressDto;
