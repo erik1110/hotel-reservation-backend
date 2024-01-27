@@ -12,6 +12,13 @@ export class AddressDto {
   zipcode: number;
 
   @ApiProperty({
+    example: '民生東路五段117號3F',
+    description: 'Detail',
+  })
+  @IsNotEmpty({ message: 'Detail is Null' })
+  detail: string;
+
+  @ApiProperty({
     example: '中正區',
     description: 'County',
   })
