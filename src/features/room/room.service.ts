@@ -11,16 +11,10 @@ export class RoomService {
   constructor(@InjectModel('Room') private readonly roomModel: Model<IRoom>) {}
 
   async getallRooms(req: Request) {
-    const result = await this.roomModel.find(
-      {
-        status: 1,
-      },
-      '_id',
-    );
-    const ids = result.map((order) => order._id.toString());
+    const result = await this.roomModel.find({ status: 1});
     return getHttpResponse.successResponse({
       message: '取得所有房型',
-      data: ids,
+      data: result,
     });
   }
 
