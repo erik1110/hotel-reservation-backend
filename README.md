@@ -1,28 +1,37 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+# Hotel Reservation Backend 飯店訂房網站
+
+## Introduction
+
+### Summary
+<img src="./image/home.png">
+
+Welcome to our Enjoyment Luxury Hotel booking website, your ideal choice for accommodation!
+
+Here, we offer a variety of featured room types to meet your diverse needs and budget. Whether you're a traveler seeking luxurious indulgence or a budget-conscious guest, we have the perfect room types for you to confidently choose from. Below is an introduction to our carefully curated room categories:
+
+### Features
+
+1. Noble Double Room: This room type offers an incredibly comfortable experience, suitable for couples or business travelers. With spacious surroundings and luxurious amenities, you can unwind and fully enjoy your stay.
+
+2. Economy Double Room: While being more budget-friendly, our Economy Double Room never compromises on comfort and cleanliness. Whether you're a budget traveler or a business commuter, this room type is an excellent choice.
+
+3. Elegant Luxury VVVIP Presidential Suite: For those seeking the utmost luxurious experience, our VVVIP Presidential Suite is designed to meet your desires. The spacious and glamorous room is equipped with top-tier facilities and services, ensuring you experience royal treatment.
+
+4. Homely Paradise: Tailored for families or small groups, this room type provides ample space and convenient amenities, allowing you and your family or friends to enjoy a delightful accommodation experience together.
+
+5. Absolute Insomnia Single Room: Ideal for solo travelers who prefer solitude and need to focus on work or contemplation, our Absolute Insomnia Single Room is the perfect choice. The comfortable environment and convenient facilities allow you to concentrate on work or relax in peace, enjoying moments of tranquility.
+
+<p align='center'>
+<img src="./image/hotel-room.png">
+<img src="./image/hotel-room2.png">
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+In addition, our booking and order management system is extremely convenient and user-friendly. You can easily check room availability and prices online, and make instant reservations. Once your booking is complete, you will receive a confirmation email with details of your order, enabling you to check your order status and manage your accommodation arrangements anytime, anywhere.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Whether you're traveling for business or leisure, we are dedicated to providing you with the highest quality service and the most comfortable accommodation experience. Thank you for choosing us, and we look forward to meeting you on your next journey!
 
-# Hotel Reservation Backend
+### Swagger
+<img src="./image/Swagger.png">
 
 This is a hotel backend service built with NestJS, featuring user login, order management, latest news, delicious dishes, room type management, and including admin functionalities.
 
@@ -30,56 +39,54 @@ This project set up Swagger docs, utilizing the Render service in conjunction wi
 
 If you find this project appealing and decide to give it a GitHub star ⭐️, I would sincerely appreciate your support. Thank you!
 
-<img src="./image/Swagger.png">
 
 ## Directory Structure
 
 ```txt
-hotel-reservation-backend
-└── src/
-    ├── auth/
-    │   ├── decorators/
-    │   ├── guards/
-    │   ├── interfaces/
-    │   ├── strategies/
-    │   ├── auth.modules.ts
-    │   └── auth.service.ts
-    ├── common/
-    │   ├── decorators/
-    │   └── dto/
-    ├── features/
-    │   ├── culinary/
-    │   ├── news/
-    │   ├── order/
-    │   ├── room/
-    │   └── user/
-    │       ├── dto
-    │       ├── interfaces
-    │       ├── schemas
-    │       ├── user.controller.ts
-    │       ├── user.module.ts
-    │       └── user.service.ts
-    ├── utils/
-    │   ├── appError.ts
-    │   ├── errorHandler.ts
-    │   ├── successHandler.ts
-    │   └── zipcodes.ts
-    ├── app.controller.ts
-    ├── app.module.ts
-    └── main.ts
+└── hotel-reservation-backend
+    └── src
+        ├── auth
+        │   ├── decorators/
+        │   ├── guards/
+        │   ├── interfaces/
+        │   ├── strategies/
+        │   ├── auth.modules.ts
+        │   └── auth.service.ts
+        ├── common
+        │   ├── decorator/
+        │   └── dto/
+        ├── features
+        │   ├── culinary/
+        │   ├── image/
+        │   ├── news/
+        │   ├── order/
+        │   ├── room/
+        │   ├── url/
+        │   └── user
+        │       ├── dto
+        │       ├── interfaces
+        │       ├── schemas
+        │       ├── user.controller.ts
+        │       ├── user.module.ts
+        │       └── user.service.ts
+        ├── utils
+        │   ├── appError.ts
+        │   ├── errorHandler.ts
+        │   ├── successHandler.ts
+        │   └── zipcodes.ts
+        ├── app.controller.ts
+        ├── app.module.ts
+        └── main.ts
 ```
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
+## How to Run
+### Installation
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+### Running the app
 
 ```bash
 # development
@@ -92,7 +99,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+### Test
 
 ```bash
 # unit tests
@@ -105,16 +112,29 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## Backend Tech Stack
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- NestJs with TypeScript
+- Mongo DB
+- Render
+- Firebase
 
-## Stay in touch
+## Live Demo
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+<a href="https://rere2133.github.io/ts30_booking_web" target="_blank">Enjoyment Luxury Hotel</a>
 
-## License
 
-Nest is [MIT licensed](LICENSE).
+## Link
+- [Frontend Repo](https://github.com/rere2133/ts30_booking_web)
+- [Backend Swagger](https://hotel-reservation-backend-sgtq.onrender.com/api-docs)
+
+## Team Member
+
+1. ColdingPoTaTo (薯餅)
+   Responsibilities | Login and Registration functionalities
+2. qw050123 (呆呆小將)
+   Responsibilities | Member profile management
+3. rere2133 (Reckie)
+   Responsibilities | Homepage, Room types, Reservation page
+4. erik1110 (Erik)
+   Backend Development
