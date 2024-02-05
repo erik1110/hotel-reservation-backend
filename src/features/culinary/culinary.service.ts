@@ -24,10 +24,9 @@ export class CulinaryService {
 
   async getallCulinary(req: Request) {
     const result = await this.culinaryModel.find();
-    const ids = result.map((order) => order._id.toString());
     return getHttpResponse.successResponse({
       message: '取得所有美味佳餚',
-      data: ids,
+      data: result,
     });
   }
 
