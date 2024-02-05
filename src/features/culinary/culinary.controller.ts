@@ -31,7 +31,6 @@ import {
   UpdateCulinarySuccessDto,
 } from './dto/culinary.dto';
 import { IsObjectIdPipe } from 'nestjs-object-id';
-import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Home/Culinary - 美味佳餚')
 @ApiErrorDecorator(
@@ -39,8 +38,6 @@ import { AuthGuard } from '@nestjs/passport';
   'CriticalError',
   '系統錯誤，請洽系統管理員',
 )
-@UseGuards(AuthGuard('jwt'))
-@ApiBearerAuth()
 @Controller('/api/v1/home/culinary')
 export class CulinaryController {
   constructor(private readonly culinaryService: CulinaryService) {}
