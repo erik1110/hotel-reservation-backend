@@ -125,8 +125,8 @@ $ npm run test:cov
 
 
 ## Link
-[Frontend Repo](https://github.com/rere2133/ts30_booking_web)
-[Backend Swagger](https://hotel-reservation-backend-sgtq.onrender.com/api-docs)
+- [Frontend Repo](https://github.com/rere2133/ts30_booking_web)
+- [Backend Swagger](https://hotel-reservation-backend-sgtq.onrender.com/api-docs)
 
 ## Team Member
 
