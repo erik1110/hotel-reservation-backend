@@ -58,10 +58,9 @@ export class OrderService {
 
   async getallOrders(req: Request) {
     const result = await this.orderModel.find({});
-    const ids = result.map((order) => order._id.toString());
     return getHttpResponse.successResponse({
       message: '取得所有訂單',
-      data: ids,
+      data: result,
     });
   }
 
@@ -72,12 +71,10 @@ export class OrderService {
         orderUserId: orderUserId,
         status: 1,
       },
-      '_id',
     );
-    const ids = result.map((order) => order._id.toString());
     return getHttpResponse.successResponse({
       message: '取得所有訂單',
-      data: ids,
+      data: result,
     });
   }
 
