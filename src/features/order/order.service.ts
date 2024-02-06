@@ -97,6 +97,19 @@ export class OrderService {
   }
 
   async deleteMyOrder(id: string, req: Request) {
+    const existingOrder = await this.orderModel.findOne({
+      _id: id,
+      orderUserId: req['user']._id,
+    });
+
+    if (!existingOrder) {
+      throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此訂單不存在');
+    }
+
+    if (existingOrder.status == -1) {
+      throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此訂單已被刪除');
+    }
+
     const result = await this.orderModel.findByIdAndUpdate(
       {
         _id: id,
@@ -110,11 +123,7 @@ export class OrderService {
         runValidators: true,
       },
     );
-    if (!result) {
-      throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此訂單不存在');
-    } else if (result.status == -1) {
-      throw new AppError(HttpStatus.NOT_FOUND, 'UserError', '此訂單已被刪除');
-    }
+
     return getHttpResponse.successResponse({
       message: '刪除訂單',
     });
