@@ -69,7 +69,6 @@ export class OrderService {
     const result = await this.orderModel.find(
       {
         orderUserId: orderUserId,
-        status: 1,
       },
     );
     return getHttpResponse.successResponse({
@@ -81,7 +80,6 @@ export class OrderService {
   async getMyOrderDetail(id: string, req: Request) {
     const result = await this.orderModel.findOne({
       _id: id,
-      status: 1,
     });
     if (!result) {
       throw new AppError(
